@@ -1,5 +1,6 @@
 package me.murmurchat.client.GUI;
 
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -58,8 +59,9 @@ public class MainWindowController
             	if (result.isPresent())
             	{
             	    String publicKey = result.get();
-            	    byte[] bytes = publicKey.getBytes();
-            	    Murmur.accountDatabase.addContact(bytes);
+            	    BigInteger key = new BigInteger(publicKey, 36);
+            	    
+            	    Murmur.accountDatabase.addContact(key.toByteArray());
             	    populateContactList();
             	}
             }

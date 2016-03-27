@@ -22,10 +22,10 @@ public class ServerHandler extends Thread
 		{
 			socket = new Socket();
 			socket.connect(new InetSocketAddress(IP, PORT), 1000);
-			
+
 			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
-			
+
 			out.write(Murmur.crypt.keyPair.getPublic().getEncoded());
 
 			System.out.println("Sent public key");
@@ -41,6 +41,8 @@ public class ServerHandler extends Thread
 
 			System.out.println("Sent decrypted message");
 
+			Murmur.accountDatabase.readFromFile(Murmur.crypt, in);
+
 			int packetType = -1;
 			while ((packetType = in.read()) != -1)
 			{
@@ -55,7 +57,7 @@ public class ServerHandler extends Thread
 					break;
 				}
 			}
-			
+
 		}
 		catch (IOException e)
 		{
@@ -74,5 +76,18 @@ public class ServerHandler extends Thread
 			System.out.println("Error closing socket");
 		}
 		this.interrupt();
+	}
+
+	public void updateClientList()
+	{
+		try
+		{
+			out.write(2);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		Murmur.accountDatabase.writeToFile(Murmur.crypt, out);
 	}
 }
