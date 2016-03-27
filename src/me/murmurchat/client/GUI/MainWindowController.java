@@ -51,6 +51,7 @@ public class MainWindowController
 
         addContactButton.setOnAction(new EventHandler<ActionEvent>() 
         {
+        	// Adds a new contact to the account database
             @Override
             public void handle(ActionEvent event) 
             {
@@ -74,6 +75,7 @@ public class MainWindowController
         
         messageInput.setOnKeyReleased(new EventHandler<KeyEvent>()
         {
+        	// If the enter key is pressed, send the message in the input box
         	final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
             
             public void handle(KeyEvent ke)
@@ -97,9 +99,11 @@ public class MainWindowController
     
     public void sendMessage()
     {
+    	// Get the text from the input box, add it to the message log, and clear the input box
     	String message = messageInput.getText();
     	messageInput.setText("");
     	
+    	// Make sure there is a new line between every new entry
     	String newLine = System.getProperty("line.separator");
     	
     	messageLog.appendText(newLine);
@@ -111,13 +115,15 @@ public class MainWindowController
     	// Remove all contacts from the list before repopulating
     	contactList.getItems().clear();
     	
-    	// Fills the contact list with the contacts from accountDatabase
+    	// Fill the contact list with the contacts from accountDatabase
     	ArrayList<Contact> contacts = Murmur.accountDatabase.getContacts();
     	
     	for(int i = 0 ; i < contacts.size() ; i++)
     	{
     			contactList.getItems().add(contacts.get(i));
     	}
+    	
+    	// Not really sure what this does
     	contactList.getStyleClass().add("mylistview");
     }
 }

@@ -18,7 +18,7 @@
                     <items>
                         <AnchorPane prefHeight="672.0" prefWidth="205.0" style="-fx-background-color: rgb(66,66,66);" SplitPane.resizableWithParent="false">
                            <children>
-                              <ScrollPane hbarPolicy="NEVER" prefHeight="672.0" prefWidth="249.0" style="-fx-background-color: rgb(66,66,66);" AnchorPane.rightAnchor="0.0">
+                              <ScrollPane hbarPolicy="NEVER" prefHeight="672.0" prefWidth="249.0" style="-fx-background-color: rgb(66,66,66);" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                  <content>
                                     <JFXListView fx:id="contactList" prefHeight="669.0" prefWidth="249.0" style="-fx-background-color: rgb(66,66,66);" />
                                  </content>
