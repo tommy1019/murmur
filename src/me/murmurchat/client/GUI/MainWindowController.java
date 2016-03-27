@@ -1,5 +1,6 @@
 package me.murmurchat.client.GUI;
 
+import java.awt.Insets;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -9,10 +10,17 @@ import me.murmurchat.client.Murmur;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXTextArea;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 
 public class MainWindowController 
 {
@@ -27,12 +35,18 @@ public class MainWindowController
     
     @FXML
     private JFXListView<Contact> contactList;
+    
+    @FXML
+    private TextArea messageLog;
+    
+    @FXML
+    private JFXTextArea messageInput;
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() 
     {    
     	populateContactList();
-    	
+
         addContactButton.setOnAction(new EventHandler<ActionEvent>() 
         {
             @Override
