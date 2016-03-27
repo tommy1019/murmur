@@ -32,10 +32,22 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: rgb(117,117,117);">
                            <children>
-                              <JFXTabPane id="tabPane" prefHeight="581.0" prefWidth="1006.0" style="-fx-background-color: rgb(158,158,158);" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <JFXTabPane id="tabPane" fx:id="tabPane" prefHeight="581.0" prefWidth="1006.0" style="-fx-background-color: rgb(117,117,117);" stylesheets="@tabPaneStyle.css" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <tabs>
+                                  <Tab text="Untitled Tab 1">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                  </Tab>
+                                  <Tab text="Untitled Tab 2">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                  </Tab>
+                                 </tabs></JFXTabPane>
                               <JFXButton fx:id="sendButton" buttonType="RAISED" layoutX="841.0" layoutY="608.0" prefHeight="51.0" prefWidth="144.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="Send" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="21.0" />
                               <JFXTextArea fx:id="messageInput" focusColor="#03a9f4" layoutX="17.0" layoutY="602.0" maxWidth="1.7976931348623157E308" prefHeight="51.0" prefWidth="808.0" wrapText="true" AnchorPane.bottomAnchor="19.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="181.0" />
-                              <TextArea fx:id="messageLog" editable="false" layoutX="7.0" layoutY="6.0" prefHeight="569.0" prefWidth="992.0" style="-fx-background-color: rgb(158,158,158);" stylesheets="@textAreaStyle.css" wrapText="true">
+                              <TextArea fx:id="messageLog" editable="false" layoutX="7.0" layoutY="54.0" prefHeight="521.0" prefWidth="992.0" style="-fx-background-color: rgb(158,158,158);" stylesheets="@textAreaStyle.css" wrapText="true">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
