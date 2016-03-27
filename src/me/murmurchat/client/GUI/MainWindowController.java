@@ -3,6 +3,7 @@ package me.murmurchat.client.GUI;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -10,10 +11,12 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
@@ -45,17 +48,25 @@ public class MainWindowController
 
 	@FXML
 	private JFXTextArea messageInput;
+	
+	@FXML
+	private JFXTextField currentProfile;
 
 	@FXML
 	private JFXTabPane tabPane;
 	
+	@FXML
+	private Tab homeTab;
+	
 	public static Contact currentContact;
-
+	
 	@FXML // This method is called by the FXMLLoader when initialization is
 			// complete
 	void initialize()
 	{		
 		populateContactList();
+		
+		currentProfile.setText("Logged In As " + Murmur.accountDatabase.displayName);
 		
 		addContactButton.setOnAction(new EventHandler<ActionEvent>()
 		{
@@ -117,25 +128,30 @@ public class MainWindowController
 		currentContact = c;
 	}
 	
-	public void updateMessageLog(Contact c)
+	public void updateMessageLog()
 	{
 		clearMessageLog();
 		
-		currentContact = c;
-		
-		if(c != null)
+		if(currentContact != null)
 		{
 			ArrayList<Contact> contacts = Murmur.accountDatabase.getContacts();
 
 			for(int i = 0; i < contacts.size(); i++)
 			{
-				//if(contacts.get(i))
+				if(contacts.get(i).equals(currentContact))
+				{
+					messageLog.setText(currentContact.getChatHistory());
+				}
 			}
 		}
 	}
 	
 	public void clearMessageLog()
 	{
+		if(currentContact != null)
+		{
+			currentContact.setChatHistory(messageLog.getText());
+		}
 		messageLog.setText("");
 	}
 	
