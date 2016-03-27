@@ -20,10 +20,13 @@ public class MurmurGUI extends Application
     /**
      * @param args the command line arguments
      */
+	
+	/*
     public static void main(String[] args) 
     {
         Application.launch(MurmurGUI.class, (java.lang.String[])null);
     }
+    */
 
     @Override
     public void start(Stage primaryStage) 
