@@ -24,16 +24,18 @@ public class Crypt
 	final int PRIVATEKEYSIZE = 1218;
 	final int PUBLICKEYSIZE = 294;
 	
+	KeyPair keyPair;
+	
 	public Crypt()
 	{
 		try
 		{
 			newKeys();
-			KeyPair myPair = getKeys();
+			keyPair = getKeys();
 			Cipher cEncrypt = Cipher.getInstance("RSA");
 			Cipher cDecrypt = Cipher.getInstance("RSA");
-			cEncrypt.init(Cipher.ENCRYPT_MODE, myPair.getPublic()); 
-			cDecrypt.init(Cipher.DECRYPT_MODE, myPair.getPrivate());	
+			cEncrypt.init(Cipher.ENCRYPT_MODE, keyPair.getPublic()); 
+			cDecrypt.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());	
 		}
 		catch(InvalidKeyException e)
 		{
