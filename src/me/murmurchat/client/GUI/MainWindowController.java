@@ -9,7 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 
-public class Controller 
+public class MainWindowController 
 {
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
