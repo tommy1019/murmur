@@ -17,12 +17,8 @@ public class ServerHandler extends Thread
 	DataInputStream in;
 	DataOutputStream out;
 
-	Crypt crypt;
-
-	public ServerHandler(Crypt crypt)
+	public ServerHandler()
 	{
-		this.crypt = crypt;
-
 		try
 		{
 			socket = new Socket();
@@ -43,15 +39,13 @@ public class ServerHandler extends Thread
 			return;
 			//System.exit(1);
 		}
-
-		this.start();
 	}
 
 	public void run()
 	{
 		try
 		{
-			out.write(crypt.keyPair.getPublic().getEncoded());
+			out.write(Murmur.crypt.keyPair.getPublic().getEncoded());
 
 			System.out.println("Sent public key");
 
@@ -61,7 +55,7 @@ public class ServerHandler extends Thread
 
 			System.out.println("Got message");
 
-			String secretMessage = new String(crypt.decrpyt(msg));
+			String secretMessage = new String(Murmur.crypt.decrpyt(msg));
 			out.write(secretMessage.getBytes());
 
 			System.out.println("Sent decrypted message");
