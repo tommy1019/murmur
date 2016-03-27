@@ -17,34 +17,16 @@ public class ServerHandler extends Thread
 	DataInputStream in;
 	DataOutputStream out;
 
-	public ServerHandler()
+	public void run()
 	{
 		try
 		{
 			socket = new Socket();
 			socket.connect(new InetSocketAddress(IP, PORT), 1000);
-
+			
 			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
-		}
-		catch (UnknownHostException e)
-		{
-			e.printStackTrace();
-			return;
-			//System.exit(1);
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error connecting to server.");
-			return;
-			//System.exit(1);
-		}
-	}
-
-	public void run()
-	{
-		try
-		{
+			
 			out.write(Murmur.crypt.keyPair.getPublic().getEncoded());
 
 			System.out.println("Sent public key");

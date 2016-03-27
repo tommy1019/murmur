@@ -16,9 +16,8 @@ public class Murmur
 		accountDatabase.contacts.add(new Contact("Tommy", null));
 		accountDatabase.contacts.add(new Contact("Bryce", null));
 		accountDatabase.contacts.add(new Contact("Sai", null));
-
+		
 		serverHandler = new ServerHandler();
-		serverHandler.start();
 
 		Application.launch(GUI.class, (java.lang.String[]) null);
 

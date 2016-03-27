@@ -31,8 +31,10 @@ public class Crypt
 	Cipher cEncrypt;
 	Cipher cDecrypt;
 	
-	public Crypt()
+	public Crypt(String path)
 	{
+		filePath = path;
+		
 		try
 		{
 			newKeys();

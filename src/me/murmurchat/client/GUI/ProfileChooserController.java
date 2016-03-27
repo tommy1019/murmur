@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import me.murmurchat.client.Crypt;
 import me.murmurchat.client.Murmur;
 
 import com.jfoenix.controls.JFXButton;
@@ -52,7 +53,9 @@ public class ProfileChooserController
             	{
             		fileDirectory.setText(selectedFile.getPath());
             		
-            		Murmur.crypt.setFilePath(selectedFile.getPath());
+            		Murmur.crypt = new Crypt(selectedFile.getPath());
+            		
+            		Murmur.serverHandler.start();
             	}
             }
         });
