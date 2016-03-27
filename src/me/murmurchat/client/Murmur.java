@@ -9,5 +9,6 @@ public class Murmur
     {
     	// Launches the client GUI
     	Application.launch(MurmurGUI.class, (java.lang.String[])null);
+    	new Crypt();
     }
 }

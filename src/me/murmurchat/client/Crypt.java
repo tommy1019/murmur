@@ -23,7 +23,6 @@ import java.nio.file.Path;
 
 public class Crypt
 {	
-	final int PRIVATEKEYSIZE = 1218;
 	final int PUBLICKEYSIZE = 294;
 	
 	KeyPair keyPair;
@@ -99,18 +98,18 @@ public class Crypt
 		{
 			Path path = Paths.get("keys");
 			byte[] data = Files.readAllBytes(path);
-			byte[] privateKeyArray = new byte[PRIVATEKEYSIZE];
+			byte[] privateKeyArray = new byte[data.length-PUBLICKEYSIZE];
 			byte[] publicKeyArray = new byte[PUBLICKEYSIZE];
 
 			for (int i = 0; i < data.length; ++i)
 			{
-			    if(i < PRIVATEKEYSIZE)
+			    if(i < PUBLICKEYSIZE)
 			    {
-			    	privateKeyArray[i] = data[i];
+			    	publicKeyArray[i] = data[i];
 			    }
 			    else
 			    {
-			    	publicKeyArray[i-PRIVATEKEYSIZE] = data[i];
+			    	privateKeyArray[i-PUBLICKEYSIZE] = data[i];
 			    }
 			}
 			
@@ -147,18 +146,18 @@ public class Crypt
 			byte[] publicKey = newPair.getPublic().getEncoded();
 			byte[] combined = new byte[privateKey.length + publicKey.length];
 
-			if(privateKey.length != PRIVATEKEYSIZE || publicKey.length != PUBLICKEYSIZE)
-				System.out.println("!Unexpected Key Size!");
-			
+			if(publicKey.length != PUBLICKEYSIZE)
+				System.out.println(privateKey.length+"!Unexpected Key Size!"+publicKey.length);
+
 			for (int i = 0; i < combined.length; ++i)
 			{
-			    if(i < privateKey.length)
+			    if(i < publicKey.length)
 			    {
-			    	combined[i] = privateKey[i];
+			    	combined[i] = publicKey[i];
 			    }
 			    else
 			    {
-			    	combined[i] = publicKey[i-privateKey.length];
+			    	combined[i] = privateKey[i-publicKey.length];
 			    }
 			}
 			
