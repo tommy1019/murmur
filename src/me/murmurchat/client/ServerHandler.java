@@ -60,7 +60,7 @@ public class ServerHandler extends Thread
 			String secretMessage = new String(crypt.decrpyt(msg));
 			out.write(secretMessage.getBytes());
 			
-			System.out.println("Sent updated file");
+			System.out.println("Sent decrypted message");
 		}
 		catch (IOException e)
 		{
