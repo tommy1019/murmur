@@ -14,8 +14,6 @@ import com.jfoenix.controls.JFXTextArea;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
@@ -50,23 +48,14 @@ public class MainWindowController
 
 	@FXML
 	private JFXTabPane tabPane;
+	
+	public static Contact currentContact;
 
 	@FXML // This method is called by the FXMLLoader when initialization is
 			// complete
 	void initialize()
-	{
+	{		
 		populateContactList();
-
-		for (int i = 0; i < 3; i++)
-		{
-			Tab tab = new Tab();
-			tab.setText("Tab " + i);
-			tab.setContent(new Label("Content"));
-			tab.setStyle("-fx-background-color:  rgb(3,169,244)");
-			tabPane.getTabs().add(tab);
-		}
-
-		
 		
 		addContactButton.setOnAction(new EventHandler<ActionEvent>()
 		{
@@ -123,12 +112,39 @@ public class MainWindowController
 		});
 	}
 
+	public static void setCurrentContact(Contact c)
+	{
+		currentContact = c;
+	}
+	
+	public void updateMessageLog(Contact c)
+	{
+		clearMessageLog();
+		
+		currentContact = c;
+		
+		if(c != null)
+		{
+			ArrayList<Contact> contacts = Murmur.accountDatabase.getContacts();
+
+			for(int i = 0; i < contacts.size(); i++)
+			{
+				//if(contacts.get(i))
+			}
+		}
+	}
+	
+	public void clearMessageLog()
+	{
+		messageLog.setText("");
+	}
+	
 	public void sendMessage()
 	{
 		// Get the text from the input box, add it to the message log, and clear
 		// the input box
 		String message = messageInput.getText();
-		messageInput.setText("");
+		clearMessageLog();
 
 		// Make sure there is a new line between every new entry
 		String newLine = System.getProperty("line.separator");
