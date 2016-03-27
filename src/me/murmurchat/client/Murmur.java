@@ -5,6 +5,8 @@ import me.murmurchat.client.GUI.GUI;
 
 public class Murmur
 {
+	public static AccountDatabase accountDatabase = new AccountDatabase();
+	
 	public static void main(String[] args)
 	{
 		Crypt crypt = new Crypt();
