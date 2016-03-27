@@ -101,7 +101,9 @@ public class ProfileChooserController
             @Override
             public void handle(ActionEvent event) 
             {
-            	if(selectedFile.exists() && fileDirectory.getText().endsWith(".profile"))
+            	// If the file is valid, send it to Crypt to create new keys and start the server handler
+            	// Then launch the program
+            	if(selectedFile != null && selectedFile.exists() && fileDirectory.getText().endsWith(".profile"))
             	{
             		Murmur.crypt = new Crypt(selectedFile.getPath());
         		
@@ -109,6 +111,7 @@ public class ProfileChooserController
         			
         			GUI.launchMainWindow();
             	}
+            	// If the file is invalid, pop a dialog and return to the profile chooser
             	else
             	{
             		Alert alert = new Alert(AlertType.WARNING);
