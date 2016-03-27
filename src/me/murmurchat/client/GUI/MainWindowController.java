@@ -155,6 +155,20 @@ public class MainWindowController
 		messageLog.setText("");
 	}
 	
+	public void receiveMessage(String message)
+	{		
+		// Make sure there is a new line between every new entry
+		String newLine = System.getProperty("line.separator");
+
+		messageLog.appendText(newLine);
+		messageLog.appendText(message);
+		
+		if(currentContact != null)
+		{
+			currentContact.setChatHistory(currentContact.getChatHistory() + newLine + message);
+		}
+	}
+	
 	public void sendMessage()
 	{
 		// Get the text from the input box, add it to the message log, and clear
