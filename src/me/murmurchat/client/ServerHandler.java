@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 
 public class ServerHandler extends Thread
 {
-	public static final String IP = "0.0.0.0";
+	public static final String IP = "10.21.7.93";
 	public static final int PORT = 21212;
 
 	Socket socket;
