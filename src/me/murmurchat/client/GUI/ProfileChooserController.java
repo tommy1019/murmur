@@ -68,6 +68,34 @@ public class ProfileChooserController
             }
         });
     	
+        newProfileButton.setOnAction(new EventHandler<ActionEvent>() 
+        {
+            @Override
+            public void handle(ActionEvent event) 
+            {
+            	// Make the user choose a .profile file to use
+            	
+            	FileChooser fileChooser = new FileChooser();
+            	FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Profiles (*.profile)", "*.profile");
+            	fileChooser.getExtensionFilters().add(extFilter);
+            	selectedFile = fileChooser.showSaveDialog(null);
+            	 
+            	if (selectedFile != null) 
+            	{
+            		fileDirectory.setText(selectedFile.getPath());
+            		
+            		try
+            		{
+            			Crypt.createNewProfile(selectedFile.getPath());
+            		}
+            		catch(Exception e)
+            		{
+            			System.out.println("Exception while creating new profile!");
+            		}
+            	}
+            }
+        });
+        
         doneButton.setOnAction(new EventHandler<ActionEvent>() 
         {
             @Override

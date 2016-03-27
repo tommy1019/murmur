@@ -23,7 +23,7 @@ import java.nio.file.Path;
 
 public class Crypt
 {	
-	final int PUBLICKEYSIZE = 294;
+	public static final int PUBLIC_KEY_SIZE = 294;
 	
 	String filePath;
 	
@@ -37,7 +37,7 @@ public class Crypt
 		
 		try
 		{
-			newKeys();
+			createNewProfile(filePath);
 			keyPair = getKeys();
 			cEncrypt = Cipher.getInstance("RSA");
 			cDecrypt = Cipher.getInstance("RSA");
@@ -102,18 +102,18 @@ public class Crypt
 		{
 			Path path = Paths.get(filePath);
 			byte[] data = Files.readAllBytes(path);
-			byte[] privateKeyArray = new byte[data.length-PUBLICKEYSIZE];
-			byte[] publicKeyArray = new byte[PUBLICKEYSIZE];
+			byte[] privateKeyArray = new byte[data.length-PUBLIC_KEY_SIZE];
+			byte[] publicKeyArray = new byte[PUBLIC_KEY_SIZE];
 
 			for (int i = 0; i < data.length; ++i)
 			{
-			    if(i < PUBLICKEYSIZE)
+			    if(i < PUBLIC_KEY_SIZE)
 			    {
 			    	publicKeyArray[i] = data[i];
 			    }
 			    else
 			    {
-			    	privateKeyArray[i-PUBLICKEYSIZE] = data[i];
+			    	privateKeyArray[i-PUBLIC_KEY_SIZE] = data[i];
 			    }
 			}
 			
@@ -139,7 +139,7 @@ public class Crypt
 		return null;
 	}
 	
-	private void newKeys() throws IOException, NoSuchAlgorithmException
+	public static void createNewProfile(String path) throws IOException, NoSuchAlgorithmException
 	{
 		try
 		{
@@ -150,7 +150,7 @@ public class Crypt
 			byte[] publicKey = newPair.getPublic().getEncoded();
 			byte[] combined = new byte[privateKey.length + publicKey.length];
 
-			if(publicKey.length != PUBLICKEYSIZE)
+			if(publicKey.length != PUBLIC_KEY_SIZE)
 				System.out.println(privateKey.length+"!Unexpected Key Size!"+publicKey.length);
 
 			for (int i = 0; i < combined.length; ++i)
@@ -165,7 +165,7 @@ public class Crypt
 			    }
 			}
 			
-			FileOutputStream fos = new FileOutputStream("keys");
+			FileOutputStream fos = new FileOutputStream(path);
 			fos.write(combined);
 			fos.close();
 		}
