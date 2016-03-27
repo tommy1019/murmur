@@ -1,11 +1,15 @@
 package me.murmurchat.client;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 
 public class AccountDatabase
 {
@@ -19,21 +23,22 @@ public class AccountDatabase
 		contacts = new ArrayList<Contact>();
 	}
 
-	public void writeToFile(Crypt crypt)
+	public void writeToFile(Crypt crypt, DataOutputStream out)
 	{
 		try
 		{
-			FileOutputStream fos = new FileOutputStream("keys");
-			DataOutputStream dos = new DataOutputStream(fos);
-			dos.write(displayName.getBytes());
-			dos.write(59);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			bos.write(displayName.getBytes());
+			bos.write(59);
 			for (int i = 0; i < contacts.size(); i++)
 			{
-				dos.write(contacts.get(i).displayName.getBytes());
-				dos.write(59);
-				dos.write(contacts.get(i).publicKey);
+				bos.write(contacts.get(i).displayName.getBytes());
+				bos.write(59);
+				bos.write(contacts.get(i).publicKey);
 			}
-			dos.close();
+			out.write(bos.size());
+			out.write(crypt.encrypt(bos.toByteArray()));
+			
 		}
 		catch (IOException e)
 		{
@@ -41,17 +46,20 @@ public class AccountDatabase
 		}
 	}
 
-	public void readFromFile(Crypt crypt)
+	public void readFromFile(Crypt crypt, DataInputStream in)
 	{
 		try
 		{
-			@SuppressWarnings("resource")
-			DataInputStream dis = new DataInputStream(new FileInputStream("keys"));
+			int fileSize = in.readInt();
+			byte[] file = new byte[fileSize];
+			in.read(file);
+			
+			ByteArrayInputStream bis = new ByteArrayInputStream(crypt.decrpyt(file));
 
 			int curByte = -1;
 
 			ArrayList<Byte> nameBytes = new ArrayList<Byte>();
-			while ((curByte = dis.read()) != 59)
+			while ((curByte = bis.read()) != 59)
 			{
 				if (curByte == -1)
 					throw new IOException("End of stream");
@@ -65,7 +73,7 @@ public class AccountDatabase
 				ArrayList<Byte> contactName = new ArrayList<Byte>();
 				
 				curByte = -1;
-				while ((curByte = dis.read()) != 59)
+				while ((curByte = bis.read()) != 59)
 				{
 					if (curByte == -1)
 						break readFileLoop;
@@ -73,12 +81,12 @@ public class AccountDatabase
 				}
 				
 				byte[] keyData = new byte[294];
-				dis.read(keyData);
+				bis.read(keyData);
 				
 				contacts.add(new Contact(new String(Util.toByteArray(contactName)), keyData));
 			}
 			
-			dis.close();
+			bis.close();
 		}
 		catch (IOException e)
 		{
