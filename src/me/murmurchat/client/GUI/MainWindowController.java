@@ -1,15 +1,15 @@
 package me.murmurchat.client.GUI;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import me.murmurchat.client.Contact;
+import me.murmurchat.client.Murmur;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 
-import javafx.collections.ObservableArrayBase;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -30,7 +30,9 @@ public class MainWindowController
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() 
-    {
+    {    
+    	populateContactList();
+    	
         addContactButton.setOnAction(new EventHandler<ActionEvent>() 
         {
             @Override
@@ -39,5 +41,17 @@ public class MainWindowController
                 System.out.println("Add contact!");
             }
         });
+    }
+    
+    public void populateContactList()
+    {
+    	// Fills the contact list with the contacts from accountDatabase
+    	ArrayList<Contact> contacts = Murmur.accountDatabase.getContacts();
+    	
+    	for(int i = 0 ; i < contacts.size() ; i++)
+    	{
+    			contactList.getItems().add(contacts.get(i));
+    	}
+    	contactList.getStyleClass().add("mylistview");
     }
 }

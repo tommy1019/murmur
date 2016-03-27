@@ -5,7 +5,7 @@ public class Contact
 	String displayName;
 	byte[] publicKey;
 	
-	Contact (String newdisplayName, byte[] newpublicKey)
+	public Contact (String newdisplayName, byte[] newpublicKey)
 	{
 		displayName = newdisplayName;
 		publicKey = newpublicKey;
