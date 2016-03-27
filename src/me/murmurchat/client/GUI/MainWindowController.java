@@ -28,6 +28,11 @@ import me.murmurchat.client.Murmur;
 
 public class MainWindowController
 {
+	public MainWindowController()
+	{
+		Murmur.mainWindowController = this;
+	}
+	
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
 
@@ -63,7 +68,7 @@ public class MainWindowController
 	@FXML // This method is called by the FXMLLoader when initialization is
 			// complete
 	void initialize()
-	{		
+	{	
 		populateContactList();
 		
 		currentProfile.setText("Logged In As " + Murmur.accountDatabase.displayName);

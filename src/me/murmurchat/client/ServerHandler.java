@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ServerHandler extends Thread
 {
@@ -50,7 +51,13 @@ public class ServerHandler extends Thread
 					byte[] senderKey = Util.readPublicKey(in);
 					String chatMsg = Util.readString(in);
 					
-					
+					for (Contact c : Murmur.accountDatabase.contacts)
+					{
+						if (Arrays.equals(senderKey, c.publicKey))
+						{
+							c.chatHistory += chatMsg;
+						}
+					}
 				default:
 					System.out.println("Client sent unknown packet type " + packetType);
 					break;
