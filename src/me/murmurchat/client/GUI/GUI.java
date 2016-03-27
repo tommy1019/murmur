@@ -41,7 +41,7 @@ public class GUI extends Application
     {
         try 
         {
-            StackPane page = (StackPane) FXMLLoader.load(GUI.class.getResource("MainWindow.fxml"));
+        	StackPane page = (StackPane) FXMLLoader.load(GUI.class.getResource("MainWindow.fxml"));
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
             primaryStage.centerOnScreen();
