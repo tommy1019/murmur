@@ -66,6 +66,8 @@ public class MainWindowController
 			tabPane.getTabs().add(tab);
 		}
 
+		
+		
 		addContactButton.setOnAction(new EventHandler<ActionEvent>()
 		{
 			// Adds a new contact to the account database
@@ -84,8 +86,8 @@ public class MainWindowController
 				{
 					String publicKey = result.get();
 					BigInteger key = new BigInteger(publicKey, 36);
-
-					Murmur.accountDatabase.addContact(key.toByteArray());
+					
+					Murmur.accountDatabase.addContact(key.toByteArray(), "Pending...");
 					populateContactList();
 				}
 			}

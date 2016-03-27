@@ -1,5 +1,7 @@
 package me.murmurchat.client;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Util
@@ -24,5 +26,39 @@ public class Util
 			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
 		}
 		return new String(hexChars);
+	}
+
+	public static byte[] readPublicKey(DataInputStream in)
+	{
+		byte[] key = new byte[294];
+		try
+		{
+			in.read(key);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return key;
+	}
+
+	public static String readString(DataInputStream in)
+	{
+		try
+		{
+			int numBytes;
+			numBytes = in.read() & 0xFF;
+
+			byte[] bytes = new byte[numBytes];
+			in.read(bytes);
+
+			return new String(bytes);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return "Error";
 	}
 }

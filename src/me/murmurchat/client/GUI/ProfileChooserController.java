@@ -2,6 +2,7 @@ package me.murmurchat.client.GUI;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
@@ -11,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import me.murmurchat.client.Crypt;
@@ -99,6 +101,18 @@ public class ProfileChooserController
             	// Then launch the program
             	if(selectedFile != null && selectedFile.exists() && fileDirectory.getText().endsWith(".profile"))
             	{
+            		TextInputDialog dialog = new TextInputDialog();
+    				dialog.setTitle("Display Name");
+    				dialog.setHeaderText(null);
+    				dialog.setContentText("Please enter your display name: ");
+
+    				// Get the user's input
+    				Optional<String> result = dialog.showAndWait();
+    				if (result.isPresent())
+    				{
+    					Murmur.accountDatabase.displayName = result.get();
+    				}
+            		
             		Murmur.crypt = new Crypt(selectedFile.getPath());
         		
         			Murmur.serverHandler.start();

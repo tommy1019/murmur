@@ -5,16 +5,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class AccountDatabase
 {
-	String displayName;
-
-	ArrayList<Contact> contacts;
+	public String displayName;
+	public ArrayList<Contact> contacts;
 
 	public AccountDatabase()
 	{
@@ -35,12 +31,12 @@ public class AccountDatabase
 				bos.write(59);
 				bos.write(contacts.get(i).publicKey);
 			}
-			
+
 			byte[] eArray = crypt.encrypt(bos.toByteArray());
-			
+
 			out.writeInt(eArray.length);
 			out.write(eArray);
-			
+
 		}
 		catch (IOException e)
 		{
@@ -51,15 +47,15 @@ public class AccountDatabase
 	public void readFromFile(Crypt crypt, DataInputStream in)
 	{
 		try
-		{			
+		{
 			int fileSize = in.readInt();
-			
+
 			if (fileSize == 0)
 				return;
-			
+
 			byte[] file = new byte[fileSize];
 			in.read(file);
-			
+
 			ByteArrayInputStream bis = new ByteArrayInputStream(crypt.decrpyt(file));
 
 			int curByte = -1;
@@ -74,14 +70,13 @@ public class AccountDatabase
 			displayName = new String(Util.toByteArray(nameBytes));
 
 			System.out.println("Display name - " + displayName);
-			
+
 			contacts.clear();
-			
-			readFileLoop:
-			while (true)
+
+			readFileLoop: while (true)
 			{
 				ArrayList<Byte> contactName = new ArrayList<Byte>();
-				
+
 				curByte = -1;
 				while ((curByte = bis.read()) != 59)
 				{
@@ -89,17 +84,16 @@ public class AccountDatabase
 						break readFileLoop;
 					contactName.add((byte) curByte);
 				}
-				
+
 				byte[] keyData = new byte[294];
 				bis.read(keyData);
-				
+
 				System.out.println("Concact name - " + new String(Util.toByteArray(contactName)));
-				
+
 				contacts.add(new Contact(new String(Util.toByteArray(contactName)), keyData));
-				
-				
+
 			}
-			
+
 			bis.close();
 		}
 		catch (IOException e)
@@ -110,25 +104,23 @@ public class AccountDatabase
 
 	}
 
-	public void addContact(byte[] publicKey)
+	public void addContact(byte[] publicKey, String name)
 	{
-		
+		contacts.add(new Contact(name, publicKey));
+		//Murmur.serverHandler.updateClientList();
+
 		try
 		{
-			KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-			kpg.initialize(2048);
-			KeyPair newPair = kpg.generateKeyPair();
-			
-			contacts.add(new Contact("Pending...", newPair.getPublic().getEncoded()));
-			
-			Murmur.serverHandler.updateClientList();
+			System.out.println("Requesting data");
+			Murmur.serverHandler.out.write(3);
+			Murmur.serverHandler.out.write(publicKey);
 		}
-		catch (NoSuchAlgorithmException e)
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public ArrayList<Contact> getContacts()
 	{
 		return contacts;
