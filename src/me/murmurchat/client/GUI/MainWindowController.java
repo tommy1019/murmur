@@ -145,6 +145,8 @@ public class MainWindowController
 		// the input box
 		String message = messageInput.getText();
 		clearMessageLog();
+		
+		Murmur.serverHandler.sendMessage(currentContact, message);
 
 		// Make sure there is a new line between every new entry
 		String newLine = System.getProperty("line.separator");

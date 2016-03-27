@@ -36,19 +36,21 @@ public class ServerHandler extends Thread
 			out.write(secretMessage.getBytes());
 
 			Murmur.accountDatabase.readFromFile(Murmur.crypt, in);
-
-			//TODO: Update gui addressbook
 			Murmur.mainWindowController.populateContactList();
-			
+
 			int packetType = -1;
 			while ((packetType = in.read()) != -1)
 			{
 				switch (packetType)
 				{
 				case 1:
-					System.out.println("Got heartbeat");
 					out.write(1);
 					break;
+				case 8:
+					byte[] senderKey = Util.readPublicKey(in);
+					String chatMsg = Util.readString(in);
+					
+					
 				default:
 					System.out.println("Client sent unknown packet type " + packetType);
 					break;
@@ -86,5 +88,20 @@ public class ServerHandler extends Thread
 			e.printStackTrace();
 		}
 		Murmur.accountDatabase.writeToFile(Murmur.crypt, out);
+	}
+
+	public void sendMessage(Contact currentContact, String message)
+	{
+		try
+		{
+			out.write(8);
+			out.write(currentContact.publicKey);
+			out.write(message.getBytes().length);
+			out.write(message.getBytes());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
