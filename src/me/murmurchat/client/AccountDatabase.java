@@ -13,6 +13,12 @@ public class AccountDatabase
 	
 	ArrayList<Contact> contacts;
 	
+	public AccountDatabase()
+	{
+		displayName = "";
+		contacts = new ArrayList<Contact>();
+	}
+	
 	public void writeToFile(Crypt crypt)
 	{			
 		try {
