@@ -26,6 +26,8 @@ public class MurmurGUI extends Application
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Murmur Client");
+            primaryStage.setMinWidth(800);
+            primaryStage.setMinHeight(200);
             primaryStage.show();
             
             launchLoginDialog();

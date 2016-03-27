@@ -7,29 +7,35 @@
 <?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
 
-<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.murmurchat.client.GUI.Controller">
+<StackPane minHeight="400.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.murmurchat.client.GUI.Controller">
    <children>
-      <VBox>
+      <HBox>
          <children>
-            <SplitPane dividerPositions="0.25">
-              <items>
-                  <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: rgb(103,58,183);">
-                     <children>
-                        <JFXButton fx:id="addContactButton" buttonType="RAISED" layoutX="167.0" layoutY="542.0" prefHeight="33.0" prefWidth="35.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="+" textAlignment="CENTER" textOverrun="CLIP">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </JFXButton>
-                     </children>
-                  </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                     <children>
-                        <JFXTabPane prefHeight="598.0" prefWidth="594.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-              </items>
-            </SplitPane>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <SplitPane dividerPositions="0.2" prefHeight="674.0" prefWidth="1265.0" VBox.vgrow="ALWAYS">
+                    <items>
+                        <AnchorPane prefHeight="672.0" prefWidth="205.0" style="-fx-background-color: rgb(66,66,66);" SplitPane.resizableWithParent="false">
+                           <children>
+                              <JFXButton fx:id="addContactButton" buttonType="RAISED" layoutX="162.0" layoutY="604.0" prefHeight="51.0" prefWidth="50.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="+" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="14.0">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <JFXTabPane prefHeight="598.0" prefWidth="594.0" style="-fx-background-color: rgb(158,158,158);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <JFXButton buttonType="RAISED" layoutX="841.0" layoutY="608.0" prefHeight="51.0" prefWidth="144.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="Send" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="21.0" />
+                              <JFXTextArea focusColor="#03a9f4" layoutX="17.0" layoutY="602.0" maxWidth="1.7976931348623157E308" prefHeight="51.0" prefWidth="808.0" wrapText="true" AnchorPane.bottomAnchor="19.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="181.0" />
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </VBox>
          </children>
-      </VBox>
+      </HBox>
    </children>
 </StackPane>
