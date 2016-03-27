@@ -96,6 +96,10 @@ public class AccountDatabase
 
 	}
 
+	public void addContact(byte[] publicKey){
+		contacts.add(new Contact("Grant",publicKey));
+	}
+	
 	public ArrayList<Contact> getContacts()
 	{
 		return contacts;
