@@ -37,7 +37,7 @@ public class ServerHandler extends Thread
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			System.out.println("Error connecting to server.");
 			return;
 			//System.exit(1);
 		}
@@ -94,7 +94,7 @@ public class ServerHandler extends Thread
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			System.out.println("Error closing socket");
 		}
 		this.interrupt();
 	}

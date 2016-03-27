@@ -10,74 +10,87 @@ import java.util.ArrayList;
 public class AccountDatabase
 {
 	String displayName;
-	
+
 	ArrayList<Contact> contacts;
-	
+
 	public AccountDatabase()
 	{
 		displayName = "";
 		contacts = new ArrayList<Contact>();
 	}
-	
+
 	public void writeToFile(Crypt crypt)
-	{			
-		try {
+	{
+		try
+		{
 			FileOutputStream fos = new FileOutputStream("keys");
 			DataOutputStream dos = new DataOutputStream(fos);
 			dos.write(displayName.getBytes());
 			dos.write(59);
-			for(int i = 0; i < contacts.size(); i++)
+			for (int i = 0; i < contacts.size(); i++)
 			{
 				dos.write(contacts.get(i).displayName.getBytes());
 				dos.write(59);
 				dos.write(contacts.get(i).publicKey);
 			}
 			dos.close();
-		} catch (IOException e) {
-			System.out.println("IOException");
-		}
-	}
-	public void readFromFile(Crypt crypt)
-	{			
-		try
-		{
-			FileInputStream fis = new FileInputStream("keys");
-			DataInputStream dis = new DataInputStream(fis);
-			byte[] nameData = new byte[64];
-			byte[] keyData = new byte[294];
-			
-			for(int i = 0; nameData[i] != 59; i++)
-			{
-				nameData[i] = ((byte) dis.read());
-			}
-			displayName = new String(nameData);
-			
-			for(int k = 0; keyData[keyData.length-1] != -1; k++)
-			{
-				for(int i = 0; nameData[i] != 59; i++)
-				{
-					nameData[i] = ((byte) dis.read());
-				}
-				for(int i = 0; i < 294; i++)
-				{
-					keyData[i] = ((byte) dis.read());
-				}
-				if(keyData[keyData.length-1] != -1)
-				{
-					contacts.add(new Contact(new String(nameData), keyData));
-				}
-			}
 		}
 		catch (IOException e)
 		{
 			System.out.println("IOException");
 		}
-		
 	}
-	
+
+	public void readFromFile(Crypt crypt)
+	{
+		try
+		{
+			@SuppressWarnings("resource")
+			DataInputStream dis = new DataInputStream(new FileInputStream("keys"));
+
+			int curByte = -1;
+
+			ArrayList<Byte> nameBytes = new ArrayList<Byte>();
+			while ((curByte = dis.read()) != 59)
+			{
+				if (curByte == -1)
+					throw new IOException("End of stream");
+				nameBytes.add((byte) curByte);
+			}
+			displayName = new String(Util.toByteArray(nameBytes));
+
+			readFileLoop:
+			while (true)
+			{
+				ArrayList<Byte> contactName = new ArrayList<Byte>();
+				
+				curByte = -1;
+				while ((curByte = dis.read()) != 59)
+				{
+					if (curByte == -1)
+						break readFileLoop;
+					nameBytes.add((byte) curByte);
+				}
+				
+				byte[] keyData = new byte[294];
+				dis.read(keyData);
+				
+				contacts.add(new Contact(new String(Util.toByteArray(contactName)), keyData));
+			}
+			
+			dis.close();
+		}
+		catch (IOException e)
+		{
+			System.out.println("IOException - Error reading user database.");
+			System.exit(1);
+		}
+
+	}
+
 	public ArrayList<Contact> getContacts()
 	{
 		return contacts;
 	}
-	
+
 }

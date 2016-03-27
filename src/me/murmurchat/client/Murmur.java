@@ -9,6 +9,11 @@ public class Murmur
 	
 	public static void main(String[] args)
 	{
+		accountDatabase.contacts.add(new Contact("Grant", null));
+		accountDatabase.contacts.add(new Contact("Tommy", null));
+		accountDatabase.contacts.add(new Contact("Bryce", null));
+		accountDatabase.contacts.add(new Contact("Sai", null));
+		
 		Crypt crypt = new Crypt();
 		ServerHandler serverHandler = new ServerHandler(crypt);
 
