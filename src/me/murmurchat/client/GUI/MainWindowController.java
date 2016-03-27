@@ -23,6 +23,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import me.murmurchat.client.Contact;
 import me.murmurchat.client.Murmur;
 
@@ -103,6 +104,15 @@ public class MainWindowController
 				}
 			}
 		});
+		
+		contactList.setOnMouseClicked(new EventHandler<MouseEvent>()
+		{
+			@Override
+			public void handle(MouseEvent me) 
+			{
+				setCurrentContact(contactList.getSelectionModel().getSelectedItem());
+			}
+		});
 
 		messageInput.setOnKeyReleased(new EventHandler<KeyEvent>()
 		{
@@ -158,6 +168,20 @@ public class MainWindowController
 			currentContact.setChatHistory(messageLog.getText());
 		}
 		messageLog.setText("");
+	}
+	
+	public void receiveMessage(String message)
+	{		
+		// Make sure there is a new line between every new entry
+		String newLine = System.getProperty("line.separator");
+
+		messageLog.appendText(newLine);
+		messageLog.appendText(message);
+		
+		if(currentContact != null)
+		{
+			currentContact.setChatHistory(currentContact.getChatHistory() + newLine + message);
+		}
 	}
 	
 	public void sendMessage()
