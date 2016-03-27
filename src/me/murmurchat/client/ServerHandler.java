@@ -48,23 +48,52 @@ public class ServerHandler extends Thread
 		try
 		{
 			out.write(crypt.keyPair.getPublic().getEncoded());
-			
+
 			System.out.println("Sent public key");
-			
+
 			int msgSize = in.readInt();
 			byte[] msg = new byte[msgSize];
 			in.read(msg);
-			
+
 			System.out.println("Got message");
-			
+
 			String secretMessage = new String(crypt.decrpyt(msg));
 			out.write(secretMessage.getBytes());
-			
+
 			System.out.println("Sent decrypted message");
+
+			int packetType = -1;
+			while ((packetType = in.read()) != -1)
+			{
+				switch (packetType)
+				{
+				case 1:
+					System.out.println("Got heartbeat");
+					out.write(1);
+					break;
+				default:
+					System.out.println("Client sent unknown packet type " + packetType);
+					break;
+				}
+			}
+			
+		}
+		catch (IOException e)
+		{
+			System.out.println("Error reading from server.");
+		}
+	}
+
+	public void disconnect()
+	{
+		try
+		{
+			socket.close();
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
+		this.interrupt();
 	}
 }

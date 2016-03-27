@@ -9,7 +9,9 @@ public class Murmur
 	{
 		Crypt crypt = new Crypt();
 		ServerHandler serverHandler = new ServerHandler(crypt);
-		
+
 		Application.launch(GUI.class, (java.lang.String[]) null);
+
+		serverHandler.disconnect();
 	}
 }
