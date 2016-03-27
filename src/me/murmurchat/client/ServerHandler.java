@@ -48,6 +48,7 @@ public class ServerHandler extends Thread
 					out.write(1);
 					break;
 				case 8:
+					System.out.println("");
 					byte[] senderKey = Util.readPublicKey(in);
 					String chatMsg = Util.readString(in);
 					
@@ -55,9 +56,10 @@ public class ServerHandler extends Thread
 					{
 						if (Arrays.equals(senderKey, c.publicKey))
 						{
-							c.chatHistory += chatMsg;
+							Murmur.mainWindowController.receiveMessage(chatMsg);
 						}
 					}
+					break;
 				default:
 					System.out.println("Client sent unknown packet type " + packetType);
 					break;
@@ -101,10 +103,12 @@ public class ServerHandler extends Thread
 	{
 		try
 		{
+			System.out.println(currentContact.displayName);
 			out.write(8);
 			out.write(currentContact.publicKey);
 			out.write(message.getBytes().length);
 			out.write(message.getBytes());
+			out.flush();
 		}
 		catch (IOException e)
 		{

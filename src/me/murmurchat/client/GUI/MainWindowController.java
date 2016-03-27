@@ -3,7 +3,6 @@ package me.murmurchat.client.GUI;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
