@@ -26,4 +26,9 @@ public class Contact
 	{
 		chatHistory = s;
 	}
+	
+	public String getDisplayName()
+	{
+		return displayName;
+	}
 }

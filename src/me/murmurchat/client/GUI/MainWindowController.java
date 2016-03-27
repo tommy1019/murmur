@@ -11,10 +11,12 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
@@ -46,9 +48,15 @@ public class MainWindowController
 
 	@FXML
 	private JFXTextArea messageInput;
+	
+	@FXML
+	private JFXTextField currentProfile;
 
 	@FXML
 	private JFXTabPane tabPane;
+	
+	@FXML
+	private Tab homeTab;
 	
 	public static Contact currentContact;
 	
@@ -57,6 +65,8 @@ public class MainWindowController
 	void initialize()
 	{		
 		populateContactList();
+		
+		currentProfile.setText("Logged In As " + Murmur.accountDatabase.displayName);
 		
 		addContactButton.setOnAction(new EventHandler<ActionEvent>()
 		{
