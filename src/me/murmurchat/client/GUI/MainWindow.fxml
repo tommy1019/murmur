@@ -17,7 +17,11 @@
                     <items>
                         <AnchorPane prefHeight="672.0" prefWidth="205.0" style="-fx-background-color: rgb(66,66,66);" SplitPane.resizableWithParent="false">
                            <children>
-                              <JFXListView fx:id="contactList" prefHeight="672.0" prefWidth="248.0" style="-fx-background-color: rgb(66,66,66);" />
+                              <ScrollPane hbarPolicy="NEVER" prefHeight="575.0" prefWidth="249.0" style="-fx-background-color: rgb(66,66,66);">
+                                 <content>
+                                    <JFXListView fx:id="contactList" prefHeight="573.0" prefWidth="249.0" style="-fx-background-color: rgb(66,66,66);" />
+                                 </content>
+                              </ScrollPane>
                               <JFXButton fx:id="addContactButton" buttonType="RAISED" layoutX="162.0" layoutY="604.0" prefHeight="51.0" prefWidth="50.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="+" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="14.0">
                                  <font>
                                     <Font size="20.0" />
