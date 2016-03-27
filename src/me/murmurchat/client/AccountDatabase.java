@@ -52,7 +52,7 @@ public class AccountDatabase
 			}
 			displayName = new String(nameData);
 			
-			for(int k = 0; nameData[k] != -1; k++)
+			for(int k = 0; keyData[keyData.length-1] != -1; k++)
 			{
 				for(int i = 0; nameData[i] != 59; i++)
 				{
@@ -62,7 +62,10 @@ public class AccountDatabase
 				{
 					keyData[i] = ((byte) dis.read());
 				}
-				contacts.add(new Contact(new String(nameData), keyData));
+				if(keyData[keyData.length-1] != -1)
+				{
+					contacts.add(new Contact(new String(nameData), keyData));
+				}
 			}
 		}
 		catch (IOException e)
