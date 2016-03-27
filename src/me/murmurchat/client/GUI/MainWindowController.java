@@ -3,6 +3,7 @@ package me.murmurchat.client.GUI;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -50,7 +51,7 @@ public class MainWindowController
 	private JFXTabPane tabPane;
 	
 	public static Contact currentContact;
-
+	
 	@FXML // This method is called by the FXMLLoader when initialization is
 			// complete
 	void initialize()
@@ -117,25 +118,30 @@ public class MainWindowController
 		currentContact = c;
 	}
 	
-	public void updateMessageLog(Contact c)
+	public void updateMessageLog()
 	{
 		clearMessageLog();
 		
-		currentContact = c;
-		
-		if(c != null)
+		if(currentContact != null)
 		{
 			ArrayList<Contact> contacts = Murmur.accountDatabase.getContacts();
 
 			for(int i = 0; i < contacts.size(); i++)
 			{
-				//if(contacts.get(i))
+				if(contacts.get(i).equals(currentContact))
+				{
+					messageLog.setText(currentContact.getChatHistory());
+				}
 			}
 		}
 	}
 	
 	public void clearMessageLog()
 	{
+		if(currentContact != null)
+		{
+			currentContact.setChatHistory(messageLog.getText());
+		}
 		messageLog.setText("");
 	}
 	
