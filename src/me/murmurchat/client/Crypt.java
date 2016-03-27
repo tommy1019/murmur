@@ -25,6 +25,8 @@ public class Crypt
 {	
 	final int PUBLICKEYSIZE = 294;
 	
+	String filePath;
+	
 	KeyPair keyPair;
 	Cipher cEncrypt;
 	Cipher cDecrypt;
@@ -96,7 +98,7 @@ public class Crypt
 	{
 		try
 		{
-			Path path = Paths.get("keys");
+			Path path = Paths.get(filePath);
 			byte[] data = Files.readAllBytes(path);
 			byte[] privateKeyArray = new byte[data.length-PUBLICKEYSIZE];
 			byte[] publicKeyArray = new byte[PUBLICKEYSIZE];
@@ -173,5 +175,10 @@ public class Crypt
 		{
 			System.out.println("NoSuchAlgorithmException");
 		}
+	}
+	
+	public void setFilePath(String path)
+	{
+		filePath = path;
 	}
 }

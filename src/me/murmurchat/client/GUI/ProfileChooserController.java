@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import me.murmurchat.client.Murmur;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
@@ -39,12 +41,18 @@ public class ProfileChooserController
             @Override
             public void handle(ActionEvent event) 
             {
+            	// Make the user choose a .profile file to use
+            	
             	FileChooser fileChooser = new FileChooser();
+            	FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Profiles (*.profile)", "*.profile");
+            	fileChooser.getExtensionFilters().add(extFilter);
             	File selectedFile = fileChooser.showOpenDialog(null);
             	 
             	if (selectedFile != null) 
             	{
-            	    fileDirectory.setText(selectedFile.getPath());
+            		fileDirectory.setText(selectedFile.getPath());
+            		
+            		Murmur.crypt.setFilePath(selectedFile.getPath());
             	}
             }
         });
