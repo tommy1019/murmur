@@ -3,6 +3,7 @@ package me.murmurchat.client;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -24,7 +25,8 @@ public class ServerHandler extends Thread
 
 		try
 		{
-			socket = new Socket(IP, PORT);
+			socket = new Socket();
+			socket.connect(new InetSocketAddress(IP, PORT), 1000);
 
 			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
