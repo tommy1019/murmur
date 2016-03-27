@@ -7,6 +7,7 @@ public class Murmur
 {
     public static void main(String[] args)
     {
+    	// Launches the client GUI
     	Application.launch(MurmurGUI.class, (java.lang.String[])null);
     }
 }
