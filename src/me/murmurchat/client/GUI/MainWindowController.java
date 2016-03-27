@@ -23,6 +23,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import me.murmurchat.client.Contact;
 import me.murmurchat.client.Murmur;
 
@@ -96,6 +97,15 @@ public class MainWindowController
 					Murmur.accountDatabase.addContact(key.toByteArray(), result2.get());
 					populateContactList();
 				}
+			}
+		});
+		
+		contactList.setOnMouseClicked(new EventHandler<MouseEvent>()
+		{
+			@Override
+			public void handle(MouseEvent me) 
+			{
+				setCurrentContact(contactList.getSelectionModel().getSelectedItem());
 			}
 		});
 
