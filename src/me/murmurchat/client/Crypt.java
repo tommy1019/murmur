@@ -10,7 +10,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import java.io.FileOutputStream;
@@ -25,6 +27,8 @@ public class Crypt
 	final int PUBLICKEYSIZE = 294;
 	
 	KeyPair keyPair;
+	Cipher cEncrypt;
+	Cipher cDecrypt;
 	
 	public Crypt()
 	{
@@ -32,8 +36,8 @@ public class Crypt
 		{
 			newKeys();
 			keyPair = getKeys();
-			Cipher cEncrypt = Cipher.getInstance("RSA");
-			Cipher cDecrypt = Cipher.getInstance("RSA");
+			cEncrypt = Cipher.getInstance("RSA");
+			cDecrypt = Cipher.getInstance("RSA");
 			cEncrypt.init(Cipher.ENCRYPT_MODE, keyPair.getPublic()); 
 			cDecrypt.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());	
 		}
@@ -53,6 +57,40 @@ public class Crypt
 		{
 			System.out.println("IOException");
 		}
+	}
+	
+	private byte[] decrpyt(byte[] byteArray)
+	{
+		try
+		{
+			return cDecrypt.doFinal(byteArray);
+		}
+		catch (IllegalBlockSizeException e)
+		{
+			System.out.println("IllegalBlockSizeException");
+		}
+		catch (BadPaddingException e)
+		{
+			System.out.println("BadPaddingException");
+		}
+		return null;
+	}
+	
+	private byte[] encrypt(byte[] byteArray)
+	{	
+		try
+		{
+			return cEncrypt.doFinal(byteArray);
+		}
+		catch (IllegalBlockSizeException e)
+		{
+			System.out.println("IllegalBlockSizeException");
+		}
+		catch (BadPaddingException e)
+		{
+			System.out.println("BadPaddingException");
+		}
+		return null;
 	}
 	
 	private KeyPair getKeys()
