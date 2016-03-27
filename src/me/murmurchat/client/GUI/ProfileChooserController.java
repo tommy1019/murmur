@@ -73,7 +73,7 @@ public class ProfileChooserController
             @Override
             public void handle(ActionEvent event) 
             {
-            	if(selectedFile != null && fileDirectory.getText().endsWith(".profile"))
+            	if(selectedFile.exists() && fileDirectory.getText().endsWith(".profile"))
             	{
             		Murmur.crypt = new Crypt(selectedFile.getPath());
         		
