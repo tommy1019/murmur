@@ -12,16 +12,8 @@ import com.jfoenix.controls.JFXTextArea;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import me.murmurchat.client.AccountDatabase;
 import me.murmurchat.client.Contact;
 import me.murmurchat.client.Murmur;
 
@@ -40,7 +32,7 @@ public class MainWindowController
     private JFXListView<Contact> contactList;
     
     @FXML
-    private JFXTextArea messageLog;
+    private TextArea messageLog;
     
     @FXML
     private JFXTextArea messageInput;
