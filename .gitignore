@@ -4,3 +4,4 @@ bin/*
 keys
 bin1/
 /bin/
+*.profile
