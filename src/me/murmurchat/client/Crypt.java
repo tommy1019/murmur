@@ -37,7 +37,6 @@ public class Crypt
 		
 		try
 		{
-			createNewProfile(filePath);
 			keyPair = getKeys();
 			cEncrypt = Cipher.getInstance("RSA");
 			cDecrypt = Cipher.getInstance("RSA");
@@ -55,10 +54,6 @@ public class Crypt
 		catch(NoSuchPaddingException e)
 		{
 			System.out.println("NoSuchPaddingException");
-		}
-		catch(IOException e)
-		{
-			System.out.println("IOException");
 		}
 	}
 	

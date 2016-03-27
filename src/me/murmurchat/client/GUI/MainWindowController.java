@@ -1,12 +1,8 @@
 package me.murmurchat.client.GUI;
 
-import java.awt.Insets;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
-import me.murmurchat.client.Contact;
-import me.murmurchat.client.Murmur;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
@@ -16,11 +12,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
+import me.murmurchat.client.Contact;
+import me.murmurchat.client.Murmur;
 
 public class MainWindowController 
 {

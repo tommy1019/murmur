@@ -4,23 +4,17 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import me.murmurchat.client.Crypt;
-import me.murmurchat.client.Murmur;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import me.murmurchat.client.Crypt;
+import me.murmurchat.client.Murmur;
 
 public class ProfileChooserController
 {
