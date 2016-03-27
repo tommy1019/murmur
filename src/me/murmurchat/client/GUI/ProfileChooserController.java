@@ -32,13 +32,13 @@ public class ProfileChooserController
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() 
     {
+    	fileDirectory.setStyle("-fx-text-fill: white;");
+    	
         browseButton.setOnAction(new EventHandler<ActionEvent>() 
         {
             @Override
             public void handle(ActionEvent event) 
             {
-            	fileDirectory.setStyle("-fx-text-fill: white;");
-  
             	FileChooser fileChooser = new FileChooser();
             	File selectedFile = fileChooser.showOpenDialog(null);
             	 
