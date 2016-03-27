@@ -2,6 +2,7 @@ package me.murmurchat.client.GUI;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
@@ -11,7 +12,16 @@ import com.jfoenix.controls.JFXTextArea;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import me.murmurchat.client.AccountDatabase;
 import me.murmurchat.client.Contact;
 import me.murmurchat.client.Murmur;
 
@@ -30,7 +40,7 @@ public class MainWindowController
     private JFXListView<Contact> contactList;
     
     @FXML
-    private TextArea messageLog;
+    private JFXTextArea messageLog;
     
     @FXML
     private JFXTextArea messageInput;
@@ -45,13 +55,30 @@ public class MainWindowController
             @Override
             public void handle(ActionEvent event) 
             {
-                System.out.println("Add contact!");
+            	// Ask the user for a public key
+            	TextInputDialog dialog = new TextInputDialog();
+            	dialog.setTitle("Add Contact");
+            	dialog.setHeaderText(null);
+            	dialog.setContentText("Please enter a public key: ");
+
+            	// Get the user's input
+            	Optional<String> result = dialog.showAndWait();
+            	if (result.isPresent())
+            	{
+            	    String publicKey = result.get();
+            	    byte[] bytes = publicKey.getBytes();
+            	    Murmur.accountDatabase.addContact(bytes);
+            	    populateContactList();
+            	}
             }
         });
     }
     
     public void populateContactList()
     {
+    	// Remove all contacts from the list before repopulating
+    	contactList.getItems().clear();
+    	
     	// Fills the contact list with the contacts from accountDatabase
     	ArrayList<Contact> contacts = Murmur.accountDatabase.getContacts();
     	

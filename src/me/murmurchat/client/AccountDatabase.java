@@ -96,7 +96,8 @@ public class AccountDatabase
 
 	}
 
-	public void addContact(byte[] publicKey){
+	public void addContact(byte[] publicKey)
+	{
 		contacts.add(new Contact("Grant",publicKey));
 	}
 	
