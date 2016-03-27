@@ -58,7 +58,7 @@ public class Crypt
 		}
 	}
 	
-	private byte[] decrpyt(byte[] byteArray)
+	public byte[] decrpyt(byte[] byteArray)
 	{
 		try
 		{
@@ -75,7 +75,7 @@ public class Crypt
 		return null;
 	}
 	
-	private byte[] encrypt(byte[] byteArray)
+	public byte[] encrypt(byte[] byteArray)
 	{	
 		try
 		{

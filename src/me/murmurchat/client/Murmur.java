@@ -5,10 +5,11 @@ import me.murmurchat.client.GUI.MurmurGUI;
 
 public class Murmur
 {
-    public static void main(String[] args)
-    {
-    	// Launches the client GUI
-    	Application.launch(MurmurGUI.class, (java.lang.String[])null);
-    	new Crypt();
-    }
+	public static void main(String[] args)
+	{
+		Crypt crypt = new Crypt();
+		ServerHandler serverHandler = new ServerHandler(crypt);
+		
+		Application.launch(MurmurGUI.class, (java.lang.String[]) null);
+	}
 }
