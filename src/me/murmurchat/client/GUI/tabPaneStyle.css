@@ -1,0 +1,9 @@
+.jfx-tab-pane .tab-header-area .jfx-rippler
+{
+    -fx-rippler-fill: WHITE;
+}
+
+.jfx-tab-pane .tab-header-area .tab-header-background 
+{
+    -fx-background-color:  rgb(3,169,244);
+}
