@@ -14,6 +14,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import me.murmurchat.client.Contact;
 import me.murmurchat.client.Murmur;
 
@@ -27,6 +31,9 @@ public class MainWindowController
     
     @FXML
     private JFXButton addContactButton;
+    
+    @FXML
+    private JFXButton sendButton;
     
     @FXML
     private JFXListView<Contact> contactList;
@@ -64,6 +71,39 @@ public class MainWindowController
             	}
             }
         });
+        
+        messageInput.setOnKeyReleased(new EventHandler<KeyEvent>()
+        {
+        	final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
+            
+            public void handle(KeyEvent ke)
+            {
+                 if (combo.match(ke)) 
+                 {
+                        sendMessage();
+                 }
+            }		
+        });
+        
+        sendButton.setOnAction(new EventHandler<ActionEvent>() 
+        {
+            @Override
+            public void handle(ActionEvent event) 
+            {
+            	sendMessage();
+            }
+        });
+    }
+    
+    public void sendMessage()
+    {
+    	String message = messageInput.getText();
+    	messageInput.setText("");
+    	
+    	String newLine = System.getProperty("line.separator");
+    	
+    	messageLog.appendText(newLine);
+    	messageLog.appendText(message);
     }
     
     public void populateContactList()
