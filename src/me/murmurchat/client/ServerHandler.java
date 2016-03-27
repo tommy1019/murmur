@@ -32,12 +32,14 @@ public class ServerHandler extends Thread
 		catch (UnknownHostException e)
 		{
 			e.printStackTrace();
-			System.exit(1);
+			return;
+			//System.exit(1);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
-			System.exit(1);
+			return;
+			//System.exit(1);
 		}
 
 		this.start();
