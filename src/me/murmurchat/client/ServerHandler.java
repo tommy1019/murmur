@@ -28,21 +28,18 @@ public class ServerHandler extends Thread
 
 			out.write(Murmur.crypt.keyPair.getPublic().getEncoded());
 
-			System.out.println("Sent public key");
-
 			int msgSize = in.readInt();
 			byte[] msg = new byte[msgSize];
 			in.read(msg);
 
-			System.out.println("Got message");
-
 			String secretMessage = new String(Murmur.crypt.decrpyt(msg));
 			out.write(secretMessage.getBytes());
 
-			System.out.println("Sent decrypted message");
-
 			Murmur.accountDatabase.readFromFile(Murmur.crypt, in);
 
+			//TODO: Update gui addressbook
+			Murmur.mainWindowController.populateContactList();
+			
 			int packetType = -1;
 			while ((packetType = in.read()) != -1)
 			{
@@ -51,32 +48,6 @@ public class ServerHandler extends Thread
 				case 1:
 					System.out.println("Got heartbeat");
 					out.write(1);
-					break;
-				case 3:
-					System.out.println("Replying with data");
-					byte[] requester = Util.readPublicKey(in);
-					out.write(4);
-					out.write(requester);
-					out.write(Murmur.accountDatabase.displayName.getBytes().length);
-					out.write(Murmur.accountDatabase.displayName.getBytes());
-				case 4:
-					System.out.println("Received data");
-					byte[] sender = Util.readPublicKey(in);
-					String name = Util.readString(in);
-					
-					for (Contact c : Murmur.accountDatabase.contacts)
-					{
-						for (int i = 0; i < c.publicKey.length; i++)
-							if (c.publicKey[i] != sender[i])
-								break;
-						
-						c.displayName = name;
-						//update frame
-						break;
-					}
-					
-					updateClientList();
-					
 					break;
 				default:
 					System.out.println("Client sent unknown packet type " + packetType);

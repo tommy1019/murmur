@@ -62,8 +62,8 @@ public class Crypt
 	{
 		try
 		{
+			System.out.println(byteArray.length);
 			ArrayList<Byte> res = new ArrayList<Byte>();
-			System.out.println(byteArray.length / 256);
 			for (int i = 0; i < byteArray.length / 256; i++)
 			{
 				byte[] curArray = new byte[256];

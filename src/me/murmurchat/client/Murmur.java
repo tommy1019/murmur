@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 
 import javafx.application.Application;
 import me.murmurchat.client.GUI.GUI;
+import me.murmurchat.client.GUI.MainWindowController;
 
 public class Murmur
 {
@@ -12,6 +13,8 @@ public class Murmur
 	public static ServerHandler serverHandler;
 	public static Crypt crypt;
 
+	public static MainWindowController mainWindowController;
+	
 	public static void main(String[] args) throws NoSuchAlgorithmException
 	{
 		serverHandler = new ServerHandler();

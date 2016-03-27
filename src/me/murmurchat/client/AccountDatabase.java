@@ -107,18 +107,7 @@ public class AccountDatabase
 	public void addContact(byte[] publicKey, String name)
 	{
 		contacts.add(new Contact(name, publicKey));
-		//Murmur.serverHandler.updateClientList();
-
-		try
-		{
-			System.out.println("Requesting data");
-			Murmur.serverHandler.out.write(3);
-			Murmur.serverHandler.out.write(publicKey);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		Murmur.serverHandler.updateClientList();
 	}
 
 	public ArrayList<Contact> getContacts()

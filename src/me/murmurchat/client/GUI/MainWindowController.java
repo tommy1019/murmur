@@ -75,19 +75,25 @@ public class MainWindowController
 			public void handle(ActionEvent event)
 			{
 				// Ask the user for a public key
-				TextInputDialog dialog = new TextInputDialog();
-				dialog.setTitle("Add Contact");
-				dialog.setHeaderText(null);
-				dialog.setContentText("Please enter a public key: ");
+				TextInputDialog dialog1 = new TextInputDialog();
+				dialog1.setTitle("Add Contact");
+				dialog1.setHeaderText(null);
+				dialog1.setContentText("Please enter a public key: ");
+				
+				TextInputDialog dialog2 = new TextInputDialog();
+				dialog2.setTitle("Add Contact");
+				dialog2.setHeaderText(null);
+				dialog2.setContentText("Please enter a display name: ");
 
 				// Get the user's input
-				Optional<String> result = dialog.showAndWait();
-				if (result.isPresent())
+				Optional<String> result1 = dialog1.showAndWait();
+				Optional<String> result2 = dialog2.showAndWait();
+				if (result1.isPresent() && result2.isPresent())
 				{
-					String publicKey = result.get();
+					String publicKey = result1.get();
 					BigInteger key = new BigInteger(publicKey, 36);
 					
-					Murmur.accountDatabase.addContact(key.toByteArray(), "Pending...");
+					Murmur.accountDatabase.addContact(key.toByteArray(), result2.get());
 					populateContactList();
 				}
 			}
@@ -133,6 +139,7 @@ public class MainWindowController
 
 	public void populateContactList()
 	{
+		Murmur.mainWindowController = this;
 		// Remove all contacts from the list before repopulating
 		contactList.getItems().clear();
 
