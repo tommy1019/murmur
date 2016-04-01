@@ -213,7 +213,7 @@ public class MainWindowController
 			contactList.getItems().add(contacts.get(i));
 		}
 
-		// Not really sure what this does
+		// Not really sure what this does, but I'm scared to delete it
 		contactList.getStyleClass().add("mylistview");
 	}
 }
