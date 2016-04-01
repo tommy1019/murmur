@@ -47,8 +47,24 @@ public class ServerHandler extends Thread
 			}
 			else if (accountStatus == 1)
 			{
-				// TODO: create account file;
+				Platform.runLater(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						GUI.launchUserInfoDialog();
+					}
+				});
 
+				try
+				{
+					this.wait();
+				}
+				catch (InterruptedException e)
+				{
+					Murmur.fatalError(e);
+				}
+				
 				Murmur.accountDatabase.writeToFile(out);
 			}
 
