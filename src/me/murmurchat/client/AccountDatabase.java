@@ -12,13 +12,60 @@ public class AccountDatabase
 	public String displayName;
 	public ArrayList<Contact> contacts;
 
-	public AccountDatabase()
+	public AccountDatabase(DataInputStream in) throws IOException
 	{
-		displayName = "Tommy";
 		contacts = new ArrayList<Contact>();
+
+		int fileSize = in.readInt();
+
+		if (fileSize == 0)
+			return;
+
+		byte[] file = new byte[fileSize];
+		in.read(file);
+
+		ByteArrayInputStream bis = new ByteArrayInputStream(Murmur.profile.decrpyt(file));
+
+		int curByte = -1;
+
+		ArrayList<Byte> nameBytes = new ArrayList<Byte>();
+		while ((curByte = bis.read()) != 59)
+		{
+			if (curByte == -1)
+				throw new IOException("End of stream");
+			nameBytes.add((byte) curByte);
+		}
+		displayName = new String(Util.toByteArray(nameBytes));
+
+		System.out.println("Display name - " + displayName);
+
+		contacts.clear();
+
+		readFileLoop: while (true)
+		{
+			ArrayList<Byte> contactName = new ArrayList<Byte>();
+
+			curByte = -1;
+			while ((curByte = bis.read()) != 59)
+			{
+				if (curByte == -1)
+					break readFileLoop;
+				contactName.add((byte) curByte);
+			}
+
+			byte[] keyData = new byte[294];
+			bis.read(keyData);
+
+			System.out.println("Concact name - " + new String(Util.toByteArray(contactName)));
+
+			contacts.add(new Contact(new String(Util.toByteArray(contactName)), keyData));
+
+		}
+
+		bis.close();
 	}
 
-	public void writeToFile(Crypt crypt, DataOutputStream out)
+	public void writeToFile(DataOutputStream out)
 	{
 		try
 		{
@@ -29,10 +76,10 @@ public class AccountDatabase
 			{
 				bos.write(contacts.get(i).displayName.getBytes());
 				bos.write(59);
-				bos.write(contacts.get(i).publicKey);
+				bos.write(contacts.get(i).contactPublicKey);
 			}
 
-			byte[] eArray = crypt.encrypt(bos.toByteArray());
+			byte[] eArray = Murmur.profile.encrypt(bos.toByteArray());
 
 			out.writeInt(eArray.length);
 			out.write(eArray);
@@ -44,70 +91,9 @@ public class AccountDatabase
 		}
 	}
 
-	public void readFromFile(Crypt crypt, DataInputStream in)
-	{
-		try
-		{
-			int fileSize = in.readInt();
-
-			if (fileSize == 0)
-				return;
-
-			byte[] file = new byte[fileSize];
-			in.read(file);
-
-			ByteArrayInputStream bis = new ByteArrayInputStream(crypt.decrpyt(file));
-
-			int curByte = -1;
-
-			ArrayList<Byte> nameBytes = new ArrayList<Byte>();
-			while ((curByte = bis.read()) != 59)
-			{
-				if (curByte == -1)
-					throw new IOException("End of stream");
-				nameBytes.add((byte) curByte);
-			}
-			displayName = new String(Util.toByteArray(nameBytes));
-
-			System.out.println("Display name - " + displayName);
-
-			contacts.clear();
-
-			readFileLoop: while (true)
-			{
-				ArrayList<Byte> contactName = new ArrayList<Byte>();
-
-				curByte = -1;
-				while ((curByte = bis.read()) != 59)
-				{
-					if (curByte == -1)
-						break readFileLoop;
-					contactName.add((byte) curByte);
-				}
-
-				byte[] keyData = new byte[294];
-				bis.read(keyData);
-
-				System.out.println("Concact name - " + new String(Util.toByteArray(contactName)));
-
-				contacts.add(new Contact(new String(Util.toByteArray(contactName)), keyData));
-
-			}
-
-			bis.close();
-		}
-		catch (IOException e)
-		{
-			System.out.println("IOException - Error reading user database.");
-			System.exit(1);
-		}
-
-	}
-
 	public void addContact(byte[] publicKey, String name)
 	{
 		contacts.add(new Contact(name, publicKey));
-		Murmur.serverHandler.updateClientList();
 	}
 
 	public ArrayList<Contact> getContacts()

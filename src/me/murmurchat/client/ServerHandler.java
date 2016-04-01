@@ -27,16 +27,16 @@ public class ServerHandler extends Thread
 			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
 
-			out.write(Murmur.crypt.keyPair.getPublic().getEncoded());
+			out.write(Murmur.profile.publicKey.getEncoded());
 
 			int msgSize = in.readInt();
 			byte[] msg = new byte[msgSize];
 			in.read(msg);
 
-			String secretMessage = new String(Murmur.crypt.decrpyt(msg));
+			String secretMessage = new String(Murmur.profile.decrpyt(msg));
 			out.write(secretMessage.getBytes());
 
-			Murmur.accountDatabase.readFromFile(Murmur.crypt, in);
+			Murmur.accountDatabase = new AccountDatabase(in);
 			Murmur.mainWindowController.populateContactList();
 
 			int packetType = -1;
@@ -54,7 +54,7 @@ public class ServerHandler extends Thread
 					
 					for (Contact c : Murmur.accountDatabase.contacts)
 					{
-						if (Arrays.equals(senderKey, c.publicKey))
+						if (Arrays.equals(senderKey, c.contactPublicKey))
 						{
 							Murmur.mainWindowController.receiveMessage(chatMsg);
 						}
@@ -84,35 +84,5 @@ public class ServerHandler extends Thread
 			System.out.println("Error closing socket");
 		}
 		this.interrupt();
-	}
-
-	public void updateClientList()
-	{
-		try
-		{
-			out.write(2);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		Murmur.accountDatabase.writeToFile(Murmur.crypt, out);
-	}
-
-	public void sendMessage(Contact currentContact, String message)
-	{
-		try
-		{
-			System.out.println(currentContact.displayName);
-			out.write(8);
-			out.write(currentContact.publicKey);
-			out.write(message.getBytes().length);
-			out.write(message.getBytes());
-			out.flush();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
 	}
 }

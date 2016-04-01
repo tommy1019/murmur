@@ -6,7 +6,8 @@ import me.murmurchat.client.GUI.MainWindowController;
 
 public class Murmur
 {
-	public static AccountDatabase accountDatabase = new AccountDatabase();
+	public static Profile profile;
+	public static AccountDatabase accountDatabase;
 
 	public static ServerHandler serverHandler;
 

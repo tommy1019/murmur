@@ -29,7 +29,8 @@ public class Profile
 	public static final int PUBLIC_KEY_SIZE = 294;
 
 	PublicKey publicKey;
-	Cipher profileCipher;
+	Cipher profileCipherEncrypt;
+	Cipher profileCipherDecrypt;
 
 	public Profile(String profilePath) throws IOException
 	{
@@ -52,8 +53,13 @@ public class Profile
 			PrivateKey privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(Util.toByteArray(privateKeyBytes)));
 			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(publicKeyBytes));
 			
-			profileCipher = Cipher.getInstance("RSA");
-			profileCipher.init(Cipher.DECRYPT_MODE, privateKey);
+			profileCipherEncrypt = Cipher.getInstance("RSA");
+			profileCipherEncrypt.init(Cipher.ENCRYPT_MODE, publicKey);
+			
+			profileCipherDecrypt = Cipher.getInstance("RSA");
+			profileCipherDecrypt.init(Cipher.DECRYPT_MODE, privateKey);
+			
+			
 		}
 		catch (NoSuchAlgorithmException | NoSuchPaddingException e)
 		{
@@ -76,7 +82,7 @@ public class Profile
 				for (int j = 256 * i; j < 256 * (i + 1); j++)
 					curArray[j % 256] = byteArray[j];
 
-				curArray = profileCipher.doFinal(curArray);
+				curArray = profileCipherDecrypt.doFinal(curArray);
 				for (byte b : curArray)
 					res.add(b);
 			}
@@ -92,6 +98,11 @@ public class Profile
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public byte[] encrypt(byte[] byteArray)
+	{
+		return Util.encryptForCipher(profileCipherEncrypt, byteArray);
 	}
 
 	public static void createNewProfile(String path) throws IOException

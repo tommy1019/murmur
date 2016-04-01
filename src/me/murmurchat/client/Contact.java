@@ -6,17 +6,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.ArrayList;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class Contact
 {
 	String displayName;
 	Cipher contactCipher;
+	byte[] contactPublicKey;
 
 	public Contact(String displayName, byte[] publicKey)
 	{
@@ -43,45 +41,7 @@ public class Contact
 
 	public byte[] encryptForConcact(byte[] bytes)
 	{
-		try
-		{
-			if (bytes.length < 245)
-				return contactCipher.doFinal(bytes);
-			
-			ArrayList<Byte> res = new ArrayList<Byte>();
-			
-			int i;
-			for (i = 0; i < bytes.length / 245; i++)
-			{
-				byte[] curArray = new byte[245];
-				for (int j = 245 * i; j < 245 * (i + 1); j++)
-					curArray[j % 245] = bytes[j];
-				
-				curArray = contactCipher.doFinal(curArray);
-				for (byte b : curArray)
-					res.add(b);
-			}
-			
-			byte[] finalArray = new byte[bytes.length % 245];
-			for (int j = 245 * (i + 1); j < bytes.length; j++)
-				finalArray[j % 245] = bytes[j];
-			
-			finalArray = contactCipher.doFinal(finalArray);
-			for (byte b : finalArray)
-				res.add(b);
-			
-			return Util.toByteArray(res);
-		}
-		catch (IllegalBlockSizeException e)
-		{
-			e.printStackTrace();
-		}
-		catch (BadPaddingException e)
-		{
-			e.printStackTrace();
-		}
-		
-		return new byte[0];
+		return Util.encryptForCipher(contactCipher, bytes);
 	}
 
 	public String toString()
