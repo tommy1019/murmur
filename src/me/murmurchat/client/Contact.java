@@ -25,6 +25,8 @@ public class Contact
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			PublicKey key = keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
 
+			contactPublicKey = key.getEncoded();
+			
 			contactCipher = Cipher.getInstance("RSA");
 			contactCipher.init(Cipher.ENCRYPT_MODE, key);
 		}
