@@ -85,4 +85,10 @@ public class ServerHandler extends Thread
 		}
 		this.interrupt();
 	}
+
+	public void sendMessage(Contact currentContact, String message)
+	{
+		//TODO: Write method
+		System.out.println("SENDING!");
+	}
 }
