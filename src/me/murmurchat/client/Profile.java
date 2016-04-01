@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -103,6 +104,11 @@ public class Profile
 	public byte[] encrypt(byte[] byteArray)
 	{
 		return Util.encryptForCipher(profileCipherEncrypt, byteArray);
+	}
+	
+	public String getPublicKey()
+	{
+		return new BigInteger(publicKey.getEncoded()).toString(36);
 	}
 
 	public static void createNewProfile(String path) throws IOException

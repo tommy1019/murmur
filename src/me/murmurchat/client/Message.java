@@ -14,6 +14,11 @@ public class Message
 		text = t;
 	}
 	
+	public byte[] getBytes()
+	{
+		return text.getBytes();
+	}
+	
 	public String getText()
 	{
 		return text;

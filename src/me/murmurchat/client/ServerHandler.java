@@ -67,7 +67,7 @@ public class ServerHandler extends Thread
 				{
 					Murmur.fatalError(e);
 				}
-				
+
 				Murmur.accountDatabase.writeToFile(out);
 			}
 
@@ -80,40 +80,7 @@ public class ServerHandler extends Thread
 				}
 			});
 
-			try
-			{
-				int packetType = -1;
-				while ((packetType = in.read()) != -1)
-				{
-					switch (packetType)
-					{
-					case 1:
-						out.write(1);
-						break;
-					case 8:
-						System.out.println("");
-						byte[] senderKey = Util.readPublicKey(in);
-						String chatMsg = Util.readString(in);
-
-						for (Contact c : Murmur.accountDatabase.contacts)
-						{
-							if (Arrays.equals(senderKey, c.contactPublicKey))
-							{
-								Murmur.mainWindowController.receiveMessage(chatMsg);
-							}
-						}
-						break;
-					default:
-						System.out.println("Client sent unknown packet type " + packetType);
-						break;
-					}
-				}
-			}
-			catch (IOException e)
-			{
-				System.err.println("Error reading from server.");
-				e.printStackTrace();
-			}
+			serverReadLoop();
 		}
 		catch (IOException e)
 		{
@@ -122,8 +89,55 @@ public class ServerHandler extends Thread
 		}
 	}
 
+	public void serverReadLoop()
+	{
+		while (true)
+		{
+			try
+			{
+				int packetType = in.read();
+
+				if (packetType == -1)
+				{
+					System.out.println("Reached end of stream.");
+					return;
+				}
+
+				switch (packetType)
+				{
+				case 1:
+					out.write(1);
+					break;
+				case 8:
+					System.out.println("");
+					byte[] senderKey = Util.readPublicKey(in);
+					
+					String msg = new String(Murmur.profile.decrpyt(Util.readString(in).getBytes()));
+
+					for (Contact c : Murmur.accountDatabase.contacts)
+					{
+						if (Arrays.equals(senderKey, c.contactPublicKey))
+						{
+							Murmur.mainWindowController.receiveMessage(msg);
+						}
+					}
+					break;
+				default:
+					System.out.println("Client sent unknown packet type " + packetType);
+					break;
+				}
+			}
+			catch (IOException e)
+			{
+				System.out.println("Encountered exception during read loop.");
+			}
+		}
+	}
+
 	public void disconnect()
 	{
+		this.interrupt();
+
 		try
 		{
 			socket.close();
@@ -132,7 +146,6 @@ public class ServerHandler extends Thread
 		{
 			System.out.println("Error closing socket");
 		}
-		this.interrupt();
 	}
 
 	public void sendMessage(Contact recipient, Message message)
@@ -140,15 +153,16 @@ public class ServerHandler extends Thread
 		try
 		{
 			out.write(8);
-
-			//out.write(currentContact.contactPublicKey);
+			out.write(recipient.contactPublicKey);
+			
+			byte[] encryptedMessage = recipient.encryptForConcact(message.getBytes());
+			
+			out.write(encryptedMessage.length);
+			out.write(encryptedMessage);
 		}
 		catch (IOException e)
 		{
-
+			System.out.println("Error sending message.");
 		}
-
-		// TODO: Write method
-		System.out.println("SENDING!");
 	}
 }
