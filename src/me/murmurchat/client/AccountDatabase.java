@@ -12,6 +12,11 @@ public class AccountDatabase
 	public String displayName;
 	public ArrayList<Contact> contacts;
 
+	public AccountDatabase(String displayName)
+	{
+		this.displayName = displayName;
+	}
+	
 	public AccountDatabase(DataInputStream in) throws IOException
 	{
 		contacts = new ArrayList<Contact>();

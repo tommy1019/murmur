@@ -39,8 +39,19 @@ public class ServerHandler extends Thread
 			String secretMessage = new String(Murmur.profile.decrpyt(msg));
 			out.write(secretMessage.getBytes());
 
-			Murmur.accountDatabase = new AccountDatabase(in);
-
+			int accountStatus = in.read();
+			
+			if(accountStatus == 0)
+			{
+				Murmur.accountDatabase = new AccountDatabase(in);
+			}
+			else if (accountStatus == 1)
+			{
+				//TODO: create account file;
+				
+				Murmur.accountDatabase.writeToFile(out);
+			}
+			
 			Platform.runLater(new Runnable()
 			{
 				@Override
