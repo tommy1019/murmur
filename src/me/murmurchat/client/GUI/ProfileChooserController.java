@@ -1,6 +1,7 @@
 package me.murmurchat.client.GUI;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -15,8 +16,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
-import me.murmurchat.client.Crypt;
 import me.murmurchat.client.Murmur;
+import me.murmurchat.client.Profile;
 
 public class ProfileChooserController
 {
@@ -82,11 +83,12 @@ public class ProfileChooserController
             		
             		try
             		{
-            			Crypt.createNewProfile(selectedFile.getPath());
+            			Profile.createNewProfile(selectedFile.getPath());
             		}
             		catch(Exception e)
             		{
             			System.out.println("Exception while creating new profile!");
+            			e.printStackTrace();
             		}
             	}
             }
@@ -113,7 +115,16 @@ public class ProfileChooserController
     					Murmur.accountDatabase.displayName = result.get();
     				}
             		
-            		Murmur.crypt = new Crypt(selectedFile.getPath());
+    				
+            		try 
+            		{
+						Murmur.currentUser = new Profile(selectedFile.getPath());
+					} 
+            		catch (IOException e) 
+            		{
+            			System.out.println("Error while loading profile!");
+						e.printStackTrace();
+					}
         		
         			Murmur.serverHandler.start();
         			
