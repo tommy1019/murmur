@@ -13,8 +13,6 @@ public class Murmur
 
 	public static MainWindowController mainWindowController;
 	
-	public static Profile currentUser;
-	
 	public static void main(String[] args)
 	{
 		serverHandler = new ServerHandler();

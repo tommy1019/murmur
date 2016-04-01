@@ -99,7 +99,7 @@ public class ProfileChooserController
             @Override
             public void handle(ActionEvent event) 
             {
-            	// If the file is valid, send it to Crypt to create new keys and start the server handler
+            	// If the file is valid, use it to load the profile and start the server handler
             	// Then launch the program
             	if(selectedFile != null && selectedFile.exists() && fileDirectory.getText().endsWith(".profile"))
             	{
@@ -107,18 +107,10 @@ public class ProfileChooserController
     				dialog.setTitle("Display Name");
     				dialog.setHeaderText(null);
     				dialog.setContentText("Please enter your display name: ");
-
-    				// Get the user's input
-    				Optional<String> result = dialog.showAndWait();
-    				if (result.isPresent())
-    				{
-    					Murmur.accountDatabase.displayName = result.get();
-    				}
             		
-    				
             		try 
             		{
-						Murmur.currentUser = new Profile(selectedFile.getPath());
+						Murmur.profile = new Profile(selectedFile.getPath());
 					} 
             		catch (IOException e) 
             		{
@@ -127,8 +119,6 @@ public class ProfileChooserController
 					}
         		
         			Murmur.serverHandler.start();
-        			
-        			GUI.launchMainWindow();
             	}
             	// If the file is invalid, pop a dialog and return to the profile chooser
             	else
