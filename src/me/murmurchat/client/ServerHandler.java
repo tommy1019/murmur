@@ -58,7 +58,10 @@ public class ServerHandler extends Thread
 
 				try
 				{
-					this.wait();
+					synchronized (this)
+					{
+						this.wait();
+					}
 				}
 				catch (InterruptedException e)
 				{

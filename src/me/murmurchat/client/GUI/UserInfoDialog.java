@@ -1,21 +1,18 @@
 package me.murmurchat.client.GUI;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import me.murmurchat.client.AccountDatabase;
-import me.murmurchat.client.Murmur;
-import me.murmurchat.client.Profile;
-import me.murmurchat.client.ServerHandler;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import me.murmurchat.client.AccountDatabase;
+import me.murmurchat.client.Murmur;
 
 public class UserInfoDialog 
 {
@@ -44,7 +41,11 @@ public class UserInfoDialog
             	if(displayName != null)
             	{
             		Murmur.accountDatabase = new AccountDatabase(displayName);
-            		Murmur.serverHandler.notify();
+            		
+            		synchronized (Murmur.serverHandler)
+					{
+            			Murmur.serverHandler.notify();
+					}
             	}
             	else
             	{
