@@ -2,7 +2,7 @@ package me.murmurchat.client;
 
 import javafx.application.Application;
 import me.murmurchat.client.GUI.GUI;
-import me.murmurchat.client.GUI.MainWindowController;
+import me.murmurchat.client.GUI.MainWindow;
 
 public class Murmur
 {
@@ -11,7 +11,7 @@ public class Murmur
 
 	public static ServerHandler serverHandler;
 
-	public static MainWindowController mainWindowController;
+	public static MainWindow mainWindowController;
 	
 	public static void main(String[] args)
 	{

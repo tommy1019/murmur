@@ -55,4 +55,21 @@ public class GUI extends Application
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static void launchUserInfoDialog()
+    {
+        try 
+        {
+        	StackPane page = (StackPane) FXMLLoader.load(GUI.class.getResource("UserInfoDialog.fxml"));
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            primaryStage.centerOnScreen();
+            primaryStage.setTitle("Input User Information");
+            primaryStage.show();
+        } 
+        catch (Exception ex) 
+        {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

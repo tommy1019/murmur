@@ -116,7 +116,7 @@ public class ServerHandler extends Thread
 		this.interrupt();
 	}
 
-	public void sendMessage(Contact currentContact, String message)
+	public void sendMessage(Contact recipient, Message message)
 	{
 		// TODO: Write method
 		System.out.println("SENDING!");

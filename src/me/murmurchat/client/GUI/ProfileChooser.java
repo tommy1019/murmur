@@ -19,7 +19,7 @@ import javafx.stage.FileChooser;
 import me.murmurchat.client.Murmur;
 import me.murmurchat.client.Profile;
 
-public class ProfileChooserController
+public class ProfileChooser
 {
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -102,12 +102,7 @@ public class ProfileChooserController
             	// If the file is valid, use it to load the profile and start the server handler
             	// Then launch the program
             	if(selectedFile != null && selectedFile.exists() && fileDirectory.getText().endsWith(".profile"))
-            	{
-            		TextInputDialog dialog = new TextInputDialog();
-    				dialog.setTitle("Display Name");
-    				dialog.setHeaderText(null);
-    				dialog.setContentText("Please enter your display name: ");
-            		
+            	{	
             		try 
             		{
 						Murmur.profile = new Profile(selectedFile.getPath());
@@ -117,7 +112,7 @@ public class ProfileChooserController
             			System.out.println("Error while loading profile!");
 						e.printStackTrace();
 					}
-        		
+        		 		
         			Murmur.serverHandler.start();
             	}
             	// If the file is invalid, pop a dialog and return to the profile chooser

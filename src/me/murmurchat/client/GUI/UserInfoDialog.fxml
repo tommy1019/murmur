@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.murmurchat.client.GUI.UserInfoDialog">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: rgb(66,66,66);">
+         <children>
+            <JFXButton fx:id="doneButton" buttonType="RAISED" layoutX="255.0" layoutY="328.0" prefHeight="31.0" prefWidth="90.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="Done" />
+            <JFXTextField fx:id="displayNameField" layoutX="38.0" layoutY="115.0" maxWidth="551.0" minWidth="444.0" prefHeight="37.0" prefWidth="524.0" promptText="Display Name" />
+            <Label layoutX="173.0" layoutY="40.0" text="Please fill out your profile information:" textAlignment="CENTER" textFill="WHITE" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

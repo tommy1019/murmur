@@ -24,11 +24,12 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import me.murmurchat.client.Contact;
+import me.murmurchat.client.Message;
 import me.murmurchat.client.Murmur;
 
-public class MainWindowController
+public class MainWindow
 {
-	public MainWindowController()
+	public MainWindow()
 	{
 		Murmur.mainWindowController = this;
 	}
@@ -165,7 +166,7 @@ public class MainWindowController
 	{
 		// Get the text from the input box, add it to the message log, and clear
 		// the input box
-		String message = messageInput.getText();
+		Message message = new Message(messageInput.getText());
 		clearMessageLog();
 		
 		Murmur.serverHandler.sendMessage(currentContact, message);
@@ -174,7 +175,7 @@ public class MainWindowController
 		String newLine = System.getProperty("line.separator");
 
 		messageLog.appendText(newLine);
-		messageLog.appendText(message);
+		messageLog.appendText(message.getText());
 	}
 
 	public void populateContactList()
