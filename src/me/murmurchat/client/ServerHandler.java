@@ -12,7 +12,7 @@ import me.murmurchat.client.GUI.GUI;
 
 public class ServerHandler extends Thread
 {
-	public static final String IP = "0.0.0.0";
+	public static final String IP = "192.168.111.143";
 	public static final int PORT = 21212;
 
 	Socket socket;
@@ -40,18 +40,18 @@ public class ServerHandler extends Thread
 			out.write(secretMessage.getBytes());
 
 			int accountStatus = in.read();
-			
-			if(accountStatus == 0)
+
+			if (accountStatus == 0)
 			{
 				Murmur.accountDatabase = new AccountDatabase(in);
 			}
 			else if (accountStatus == 1)
 			{
-				//TODO: create account file;
-				
+				// TODO: create account file;
+
 				Murmur.accountDatabase.writeToFile(out);
 			}
-			
+
 			Platform.runLater(new Runnable()
 			{
 				@Override
@@ -60,7 +60,7 @@ public class ServerHandler extends Thread
 					GUI.launchMainWindow();
 				}
 			});
-			
+
 			try
 			{
 				int packetType = -1;
@@ -118,6 +118,17 @@ public class ServerHandler extends Thread
 
 	public void sendMessage(Contact recipient, Message message)
 	{
+		try
+		{
+			out.write(8);
+
+			//out.write(currentContact.contactPublicKey);
+		}
+		catch (IOException e)
+		{
+
+		}
+
 		// TODO: Write method
 		System.out.println("SENDING!");
 	}
