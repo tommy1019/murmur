@@ -145,27 +145,10 @@ public class MainWindowController
 	public void updateMessageLog()
 	{
 		clearMessageLog();
-		
-		if(currentContact != null)
-		{
-			ArrayList<Contact> contacts = Murmur.accountDatabase.getContacts();
-
-			for(int i = 0; i < contacts.size(); i++)
-			{
-				if(contacts.get(i).equals(currentContact))
-				{
-					messageLog.setText(currentContact.getChatHistory());
-				}
-			}
-		}
 	}
 	
 	public void clearMessageLog()
 	{
-		if(currentContact != null)
-		{
-			currentContact.setChatHistory(messageLog.getText());
-		}
 		messageLog.setText("");
 	}
 	
@@ -176,11 +159,6 @@ public class MainWindowController
 
 		messageLog.appendText(newLine);
 		messageLog.appendText(message);
-		
-		if(currentContact != null)
-		{
-			currentContact.setChatHistory(currentContact.getChatHistory() + newLine + message);
-		}
 	}
 	
 	public void sendMessage()

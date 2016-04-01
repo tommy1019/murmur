@@ -9,7 +9,6 @@ public class Murmur
 	public static AccountDatabase accountDatabase = new AccountDatabase();
 
 	public static ServerHandler serverHandler;
-	public static Crypt crypt;
 
 	public static MainWindowController mainWindowController;
 	
@@ -20,5 +19,12 @@ public class Murmur
 		Application.launch(GUI.class, (java.lang.String[]) null);
 
 		serverHandler.disconnect();
+	}
+	
+	public static void fatalError(Exception e)
+	{
+		System.err.println("Encountered a fatal error, program stopping.");
+		e.printStackTrace();
+		System.exit(1);
 	}
 }
