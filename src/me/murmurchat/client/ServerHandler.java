@@ -7,9 +7,12 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Arrays;
 
+import javafx.application.Platform;
+import me.murmurchat.client.GUI.GUI;
+
 public class ServerHandler extends Thread
 {
-	public static final String IP = "10.21.7.93";
+	public static final String IP = "0.0.0.0";
 	public static final int PORT = 21212;
 
 	Socket socket;
@@ -37,39 +40,55 @@ public class ServerHandler extends Thread
 			out.write(secretMessage.getBytes());
 
 			Murmur.accountDatabase = new AccountDatabase(in);
-			Murmur.mainWindowController.populateContactList();
 
-			int packetType = -1;
-			while ((packetType = in.read()) != -1)
+			Platform.runLater(new Runnable()
 			{
-				switch (packetType)
+				@Override
+				public void run()
 				{
-				case 1:
-					out.write(1);
-					break;
-				case 8:
-					System.out.println("");
-					byte[] senderKey = Util.readPublicKey(in);
-					String chatMsg = Util.readString(in);
-					
-					for (Contact c : Murmur.accountDatabase.contacts)
+					GUI.launchMainWindow();
+				}
+			});
+			
+			try
+			{
+				int packetType = -1;
+				while ((packetType = in.read()) != -1)
+				{
+					switch (packetType)
 					{
-						if (Arrays.equals(senderKey, c.contactPublicKey))
+					case 1:
+						out.write(1);
+						break;
+					case 8:
+						System.out.println("");
+						byte[] senderKey = Util.readPublicKey(in);
+						String chatMsg = Util.readString(in);
+
+						for (Contact c : Murmur.accountDatabase.contacts)
 						{
-							Murmur.mainWindowController.receiveMessage(chatMsg);
+							if (Arrays.equals(senderKey, c.contactPublicKey))
+							{
+								Murmur.mainWindowController.receiveMessage(chatMsg);
+							}
 						}
+						break;
+					default:
+						System.out.println("Client sent unknown packet type " + packetType);
+						break;
 					}
-					break;
-				default:
-					System.out.println("Client sent unknown packet type " + packetType);
-					break;
 				}
 			}
-
+			catch (IOException e)
+			{
+				System.err.println("Error reading from server.");
+				e.printStackTrace();
+			}
 		}
 		catch (IOException e)
 		{
-			System.out.println("Error reading from server.");
+			System.out.println("Error connecting to server.");
+			Murmur.fatalError(e);
 		}
 	}
 
@@ -88,7 +107,7 @@ public class ServerHandler extends Thread
 
 	public void sendMessage(Contact currentContact, String message)
 	{
-		//TODO: Write method
+		// TODO: Write method
 		System.out.println("SENDING!");
 	}
 }
