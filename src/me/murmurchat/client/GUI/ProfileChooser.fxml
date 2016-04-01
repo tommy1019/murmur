@@ -8,10 +8,10 @@
    <children>
       <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="162.0" prefWidth="589.0" style="-fx-background-color: rgb(66,66,66);">
          <children>
-            <JFXButton fx:id="browseButton" buttonType="RAISED" layoutX="381.0" layoutY="34.0" prefHeight="31.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="Browse" />
+            <JFXButton fx:id="browseButton" buttonType="RAISED" layoutX="381.0" layoutY="34.0" prefHeight="31.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="Browse" textFill="WHITE" />
             <JFXTextField fx:id="fileDirectory" focusColor="#40a9f4" layoutX="14.0" layoutY="34.0" maxWidth="353.0" minWidth="352.0" prefHeight="31.0" prefWidth="352.0" promptText="File Path" />
-            <JFXButton fx:id="doneButton" buttonType="RAISED" layoutX="250.0" layoutY="98.0" prefHeight="31.0" prefWidth="90.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="Done" />
-            <JFXButton fx:id="newProfileButton" buttonType="RAISED" layoutX="467.0" layoutY="34.0" prefHeight="31.0" prefWidth="108.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="New Profile" />
+            <JFXButton fx:id="doneButton" buttonType="RAISED" layoutX="250.0" layoutY="98.0" prefHeight="31.0" prefWidth="90.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="Done" textFill="WHITE" />
+            <JFXButton fx:id="newProfileButton" buttonType="RAISED" layoutX="467.0" layoutY="34.0" prefHeight="31.0" prefWidth="108.0" ripplerFill="WHITE" style="-fx-background-color: rgb(3,169,244);" text="New Profile" textFill="WHITE" />
          </children>
       </AnchorPane>
    </children>
