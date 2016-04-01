@@ -15,9 +15,13 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -45,6 +49,9 @@ public class MainWindow
 
 	@FXML
 	private JFXButton sendButton;
+	
+	@FXML
+	private JFXButton getKeyButton;
 
 	@FXML
 	private JFXListView<Contact> contactList;
@@ -102,6 +109,26 @@ public class MainWindow
 					Murmur.accountDatabase.addContact(key.toByteArray(), result2.get());
 					populateContactList();
 				}
+			}
+		});
+		
+		getKeyButton.setOnAction(new EventHandler<ActionEvent>()
+		{
+			// Copies the user's public key to the clipboard
+			@Override
+			public void handle(ActionEvent event)
+			{
+		        final Clipboard clipboard = Clipboard.getSystemClipboard();
+		        final ClipboardContent content = new ClipboardContent();
+		        content.putString(Murmur.profile.getPublicKey());
+		        clipboard.setContent(content);
+		        
+        		Alert alert = new Alert(AlertType.WARNING);
+        		alert.setTitle("Key Copied");
+        		alert.setHeaderText(null);
+        		alert.setContentText("Your public key has been copied to the clipboard");
+
+        		alert.showAndWait();
 			}
 		});
 		
