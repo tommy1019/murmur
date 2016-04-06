@@ -80,7 +80,6 @@ public class Profile
 				for (int j = 256 * i; j < 256 * (i + 1); j++)
 					curArray[j % 256] = byteArray[j];
 
-				System.out.println(curArray.length);
 				curArray = profileCipherDecrypt.doFinal(curArray);
 				for (byte b : curArray)
 					res.add(b);

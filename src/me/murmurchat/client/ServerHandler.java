@@ -132,6 +132,7 @@ public class ServerHandler extends Thread
 			{
 				System.out.println("Encountered exception during read loop.");
 				disconnect();
+				return;
 			}
 		}
 	}
@@ -159,7 +160,7 @@ public class ServerHandler extends Thread
 			
 			byte[] encryptedMessage = recipient.encryptForConcact(message.getBytes());
 			
-			out.write(encryptedMessage.length);
+			out.writeInt(encryptedMessage.length);
 			out.write(encryptedMessage);
 		}
 		catch (IOException e)
