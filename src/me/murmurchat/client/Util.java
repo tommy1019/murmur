@@ -16,7 +16,9 @@ public class Util
 		{
 			if (bytes.length < 245)
 				return cipher.doFinal(bytes);
-						
+			
+			ArrayList<Byte> res = new ArrayList<Byte>();
+			
 			int i;
 			for (i = 0; i < bytes.length / 245; i++)
 			{
@@ -24,14 +26,20 @@ public class Util
 				for (int j = 245 * i; j < 245 * (i + 1); j++)
 					curArray[j % 245] = bytes[j];
 				
-				//curArray = cipher.update(curArray);
+				curArray = cipher.doFinal(curArray);
+				for (byte b : curArray)
+					res.add(b);
 			}
 			
 			byte[] finalArray = new byte[bytes.length % 245];
 			for (int j = 245 * (i + 1); j < bytes.length; j++)
 				finalArray[j % 245] = bytes[j];
 			
-			return cipher.doFinal(bytes);
+			finalArray = cipher.doFinal(finalArray);
+			for (byte b : finalArray)
+				res.add(b);
+			
+			return toByteArray(res);
 		}
 		catch (IllegalBlockSizeException e)
 		{
