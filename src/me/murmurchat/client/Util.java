@@ -79,9 +79,7 @@ public class Util
 	{
 		try
 		{
-			int numBytes;
-			numBytes = in.readInt();
-
+			int numBytes = in.readInt();
 			byte[] bytes = new byte[numBytes];
 			in.read(bytes);
 

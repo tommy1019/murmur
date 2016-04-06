@@ -44,7 +44,6 @@ public class Profile
 		int curByte = -1;
 		while ((curByte = in.read()) != -1)
 			privateKeyBytes.add((byte) curByte);
-
 		in.close();
 
 		try
@@ -59,8 +58,6 @@ public class Profile
 			
 			profileCipherDecrypt = Cipher.getInstance("RSA");
 			profileCipherDecrypt.init(Cipher.DECRYPT_MODE, privateKey);
-			
-			
 		}
 		catch (NoSuchAlgorithmException | NoSuchPaddingException e)
 		{
@@ -83,6 +80,7 @@ public class Profile
 				for (int j = 256 * i; j < 256 * (i + 1); j++)
 					curArray[j % 256] = byteArray[j];
 
+				System.out.println(curArray.length);
 				curArray = profileCipherDecrypt.doFinal(curArray);
 				for (byte b : curArray)
 					res.add(b);
@@ -90,11 +88,7 @@ public class Profile
 
 			return Util.toByteArray(res);
 		}
-		catch (IllegalBlockSizeException e)
-		{
-			e.printStackTrace();
-		}
-		catch (BadPaddingException e)
+		catch (IllegalBlockSizeException | BadPaddingException e)
 		{
 			e.printStackTrace();
 		}

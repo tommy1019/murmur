@@ -37,6 +37,7 @@ public class ServerHandler extends Thread
 			in.read(msg);
 
 			String secretMessage = new String(Murmur.profile.decrpyt(msg));
+			System.out.println(secretMessage);
 			out.write(secretMessage.getBytes());
 
 			int accountStatus = in.read();
@@ -130,6 +131,7 @@ public class ServerHandler extends Thread
 			catch (IOException e)
 			{
 				System.out.println("Encountered exception during read loop.");
+				disconnect();
 			}
 		}
 	}
