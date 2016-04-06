@@ -12,7 +12,7 @@ import me.murmurchat.client.GUI.GUI;
 
 public class ServerHandler extends Thread
 {
-	public static final String IP = "192.168.111.143";
+	public static final String IP = "0.0.0.0";
 	public static final int PORT = 21212;
 
 	Socket socket;
@@ -112,7 +112,7 @@ public class ServerHandler extends Thread
 					System.out.println("");
 					byte[] senderKey = Util.readPublicKey(in);
 					
-					String msg = new String(Murmur.profile.decrpyt(Util.readString(in).getBytes()));
+					String msg = new String(Murmur.profile.decrpyt(Util.readPrefixedBytes(in)));
 
 					for (Contact c : Murmur.accountDatabase.contacts)
 					{
