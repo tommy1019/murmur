@@ -21,7 +21,7 @@ public class Contact
 		this.displayName = displayName;
 
 		try
-		{
+		{			
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			PublicKey key = keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
 
@@ -36,7 +36,7 @@ public class Contact
 		}
 		catch (InvalidKeySpecException | InvalidKeyException e)
 		{
-			System.out.println("Encountered invalid key for concact with display name " + displayName);
+			System.out.println("Encountered invalid key for contact with display name " + displayName);
 			Murmur.fatalError(e);
 		}
 	}

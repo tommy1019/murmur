@@ -23,8 +23,8 @@ public class Util
 			for (i = 0; i < bytes.length / 245; i++)
 			{
 				byte[] curArray = new byte[245];
-				for (int j = 245 * i; j < 245 * (i + 1); j++)
-					curArray[j % 245] = bytes[j];
+				for (int j = 0; j < 245; j++)
+					curArray[j] = bytes[j + 245 * i];
 				
 				curArray = cipher.doFinal(curArray);
 				for (byte b : curArray)
@@ -32,8 +32,8 @@ public class Util
 			}
 			
 			byte[] finalArray = new byte[bytes.length % 245];
-			for (int j = 245 * (i + 1); j < bytes.length; j++)
-				finalArray[j % 245] = bytes[j];
+			for (int j = 0; j < bytes.length % 245; j++)
+				finalArray[j] = bytes[j + 245 * i];
 			
 			finalArray = cipher.doFinal(finalArray);
 			for (byte b : finalArray)

@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class AccountDatabase
@@ -30,62 +31,47 @@ public class AccountDatabase
 		byte[] file = new byte[fileSize];
 		in.read(file);
 
-		ByteArrayInputStream bis = new ByteArrayInputStream(Murmur.profile.decrpyt(file));
+		DataInputStream bIn = new DataInputStream(new ByteArrayInputStream(Murmur.profile.decrpyt(file)));
 
-		int curByte = -1;
+		int displayLength = bIn.readInt();
+		byte[] displayNameBytes = new byte[displayLength];
+		bIn.read(displayNameBytes);
 
-		ArrayList<Byte> nameBytes = new ArrayList<Byte>();
-		while ((curByte = bis.read()) != 59)
-		{
-			if (curByte == -1)
-				throw new IOException("End of stream");
-			nameBytes.add((byte) curByte);
-		}
-		displayName = new String(Util.toByteArray(nameBytes));
+		displayName = new String(displayNameBytes);
 
 		System.out.println("Display name - " + displayName);
 
-		contacts.clear();
+		int numContacts = bIn.readInt();
 
-		readFileLoop: while (true)
+		for (int i = 0; i < numContacts; i++)
 		{
-			ArrayList<Byte> contactName = new ArrayList<Byte>();
-
-			curByte = -1;
-			while ((curByte = bis.read()) != 59)
-			{
-				if (curByte == -1)
-					break readFileLoop;
-				contactName.add((byte) curByte);
-			}
-
-			byte[] keyData = new byte[294];
-			bis.read(keyData);
-
-			System.out.println("Concact name - " + new String(Util.toByteArray(contactName)));
-
-			contacts.add(new Contact(new String(Util.toByteArray(contactName)), keyData));
-
+			String contactName = new String(Util.readPrefixedBytes(bIn));
+			System.out.println("Contact name - " + contactName);
+			contacts.add(new Contact(contactName, Util.readPublicKey(bIn)));
 		}
 
-		bis.close();
+		bIn.close();
 	}
 
 	public void writeToFile(DataOutputStream out)
 	{
 		try
 		{
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			bos.write(displayName.getBytes());
-			bos.write(59);
-			for (int i = 0; i < contacts.size(); i++)
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			DataOutputStream bOut = new DataOutputStream(stream);
+			bOut.writeInt(displayName.getBytes().length);
+			bOut.write(displayName.getBytes());
+
+			bOut.writeInt(contacts.size());
+			for (Contact c : contacts)
 			{
-				bos.write(contacts.get(i).displayName.getBytes());
-				bos.write(59);
-				bos.write(contacts.get(i).contactPublicKey);
+				bOut.writeInt(c.displayName.getBytes().length);
+				bOut.write(c.displayName.getBytes());
+				System.out.println(new BigInteger(c.contactPublicKey).toString(36));
+				bOut.write(c.contactPublicKey);
 			}
 
-			byte[] eArray = Murmur.profile.encrypt(bos.toByteArray());
+			byte[] eArray = Murmur.profile.encrypt(stream.toByteArray());
 
 			out.writeInt(eArray.length);
 			out.write(eArray);
@@ -100,6 +86,8 @@ public class AccountDatabase
 	public void addContact(byte[] publicKey, String name)
 	{
 		contacts.add(new Contact(name, publicKey));
+
+		Murmur.serverHandler.updateServerProfile();
 	}
 
 	public ArrayList<Contact> getContacts()

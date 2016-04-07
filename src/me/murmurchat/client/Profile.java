@@ -77,8 +77,9 @@ public class Profile
 			for (int i = 0; i < byteArray.length / 256; i++)
 			{
 				byte[] curArray = new byte[256];
-				for (int j = 256 * i; j < 256 * (i + 1); j++)
-					curArray[j % 256] = byteArray[j];
+				
+				for (int j = 0; j < 256; j++)
+					curArray[j] = byteArray[j + 256 * i];
 
 				curArray = profileCipherDecrypt.doFinal(curArray);
 				for (byte b : curArray)
@@ -89,7 +90,7 @@ public class Profile
 		}
 		catch (IllegalBlockSizeException | BadPaddingException e)
 		{
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}
 		return null;
 	}

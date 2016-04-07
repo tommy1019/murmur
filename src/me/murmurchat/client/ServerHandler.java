@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.Optional;
 
 import javafx.application.Platform;
 import me.murmurchat.client.GUI.GUI;
@@ -37,7 +38,6 @@ public class ServerHandler extends Thread
 			in.read(msg);
 
 			String secretMessage = new String(Murmur.profile.decrpyt(msg));
-			System.out.println(secretMessage);
 			out.write(secretMessage.getBytes());
 
 			int accountStatus = in.read();
@@ -48,13 +48,9 @@ public class ServerHandler extends Thread
 			}
 			else if (accountStatus == 1)
 			{
-				Platform.runLater(new Runnable()
+				Platform.runLater(() ->
 				{
-					@Override
-					public void run()
-					{
-						GUI.launchUserInfoDialog();
-					}
+					GUI.launchUserInfoDialog();
 				});
 
 				try
@@ -72,13 +68,9 @@ public class ServerHandler extends Thread
 				Murmur.accountDatabase.writeToFile(out);
 			}
 
-			Platform.runLater(new Runnable()
+			Platform.runLater(() ->
 			{
-				@Override
-				public void run()
-				{
-					GUI.launchMainWindow();
-				}
+				GUI.launchMainWindow();
 			});
 
 			serverReadLoop();
@@ -112,16 +104,14 @@ public class ServerHandler extends Thread
 				case 8:
 					System.out.println("");
 					byte[] senderKey = Util.readPublicKey(in);
-					
+
 					String msg = new String(Murmur.profile.decrpyt(Util.readPrefixedBytes(in)));
 
-					for (Contact c : Murmur.accountDatabase.contacts)
-					{
-						if (Arrays.equals(senderKey, c.contactPublicKey))
-						{
-							Murmur.mainWindowController.receiveMessage(msg);
-						}
-					}
+					Optional<Contact> contact = Murmur.accountDatabase.contacts.stream().filter(c -> Arrays.equals(senderKey, c.contactPublicKey)).findFirst();
+
+					if (contact.isPresent())
+						Murmur.mainWindowController.receiveMessage(msg);
+
 					break;
 				default:
 					System.out.println("Client sent unknown packet type " + packetType);
@@ -157,15 +147,28 @@ public class ServerHandler extends Thread
 		{
 			out.write(8);
 			out.write(recipient.contactPublicKey);
-			
+
 			byte[] encryptedMessage = recipient.encryptForConcact(message.getBytes());
-			
+
 			out.writeInt(encryptedMessage.length);
 			out.write(encryptedMessage);
 		}
 		catch (IOException e)
 		{
 			System.out.println("Error sending message.");
+		}
+	}
+
+	public void updateServerProfile()
+	{
+		try
+		{
+			out.write(2);
+			Murmur.accountDatabase.writeToFile(out);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
 		}
 	}
 }
