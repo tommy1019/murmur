@@ -19,6 +19,8 @@ import me.murmurchat.client.Profile;
 
 public class ProfileChooser
 {
+	public static final String PREFERENCES_PROFILE_PATH = "PROFILE_PATH";
+	
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
@@ -42,7 +44,8 @@ public class ProfileChooser
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() 
     {
-    	fileDirectory.setStyle("-fx-text-fill: white;");
+    	fileDirectory.setStyle("-fx-text-fill: white;");    	
+    	fileDirectory.setText(Murmur.preferences.get(PREFERENCES_PROFILE_PATH, "File Path"));
     	
         browseButton.setOnAction(new EventHandler<ActionEvent>() 
         {
@@ -104,6 +107,7 @@ public class ProfileChooser
             		try 
             		{
 						Murmur.profile = new Profile(selectedFile.getPath());
+						Murmur.preferences.put(PREFERENCES_PROFILE_PATH, selectedFile.getPath());
 					} 
             		catch (IOException e) 
             		{
