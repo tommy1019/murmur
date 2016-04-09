@@ -100,6 +100,8 @@ public class ProfileChooser
             @Override
             public void handle(ActionEvent event) 
             {
+            	selectedFile = new File(fileDirectory.getText());
+            	
             	// If the file is valid, use it to load the profile and start the server handler
             	// Then launch the program
             	if(selectedFile != null && selectedFile.exists() && fileDirectory.getText().endsWith(".profile"))
