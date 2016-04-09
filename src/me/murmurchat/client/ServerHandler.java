@@ -1,6 +1,8 @@
 package me.murmurchat.client;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -52,8 +54,7 @@ public class ServerHandler extends Thread
 			}
 			else if (accountStatus == 1)
 			{
-				Platform.runLater(() ->
-				{
+				Platform.runLater(() -> {
 					GUI.launchUserInfoDialog();
 				});
 
@@ -72,8 +73,7 @@ public class ServerHandler extends Thread
 				Murmur.accountDatabase.writeToFile(out);
 			}
 
-			Platform.runLater(() ->
-			{
+			Platform.runLater(() -> {
 				GUI.launchMainWindow();
 			});
 
@@ -106,10 +106,13 @@ public class ServerHandler extends Thread
 					out.write(1);
 					break;
 				case 8:
-					System.out.println("");
 					byte[] senderKey = Util.readPublicKey(in);
 
-					String msg = new String(Murmur.profile.decrpyt(Util.readPrefixedBytes(in)));
+					byte[] message = Util.readPrefixedBytes(in);
+					DataInputStream messageIn = new DataInputStream(new ByteArrayInputStream(message));
+					
+					long conversationId = messageIn.readLong();
+					String msg = new String(Murmur.profile.decrpyt(Util.readPrefixedBytes(messageIn)));
 
 					Optional<Contact> contact = Murmur.accountDatabase.contacts.stream().filter(c -> Arrays.equals(senderKey, c.contactPublicKey)).findFirst();
 
@@ -145,24 +148,45 @@ public class ServerHandler extends Thread
 		}
 	}
 
-	public void sendMessage(Contact recipient, Message message)
+	public void sendMessage(Conversation conversation, Message message)
 	{
+		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+		DataOutputStream byteOut = new DataOutputStream(byteStream);
+
+		byte[] messageData;
+
 		try
 		{
-			out.write(8);
-			out.write(recipient.contactPublicKey);
+			byteOut.writeLong(conversation.conversationId);
+			
+			byte[] msgData = message.getBytes();
+			byteOut.writeInt(msgData.length);
+			byteOut.write(msgData);
 
-			byte[] encryptedMessage = recipient.encryptForConcact(message.getBytes());
+			byteOut.close();
 
-			out.writeInt(encryptedMessage.length);
-			out.write(encryptedMessage);
+			messageData = byteStream.toByteArray();
+			byteStream.close();
+
+			for (Contact contact : conversation.contacts)
+			{
+				out.write(8);
+				out.write(contact.contactPublicKey);
+
+				byte[] encryptedMessage = contact.encryptForConcact(messageData);
+
+				out.writeInt(encryptedMessage.length);
+				out.write(encryptedMessage);
+			}
 		}
 		catch (IOException e)
 		{
-			System.out.println("Error sending message.");
+			System.out.println("Error sending message");
+			e.printStackTrace();
+			return;
 		}
 	}
-	
+
 	String getIpFromServer()
 	{
 		try
@@ -170,14 +194,14 @@ public class ServerHandler extends Thread
 			BufferedReader r = new BufferedReader(new InputStreamReader(new URL(SERVER_LOC).openStream()));
 			String ip = r.readLine();
 			r.close();
-			
+
 			return ip;
 		}
 		catch (IOException e)
 		{
 			System.out.println("Error retrieving ip from server, defaulting to localhost.");
 		}
-		
+
 		return DEFAULT_IP;
 	}
 
