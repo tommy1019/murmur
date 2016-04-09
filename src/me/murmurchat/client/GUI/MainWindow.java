@@ -1,10 +1,8 @@
 package me.murmurchat.client.GUI;
 
 import java.math.BigInteger;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
@@ -37,12 +35,6 @@ public class MainWindow
 	{
 		Murmur.mainWindowController = this;
 	}
-	
-	@FXML // ResourceBundle that was given to the FXMLLoader
-	private ResourceBundle resources;
-
-	@FXML // URL location of the FXML file that was given to the FXMLLoader
-	private URL location;
 
 	@FXML
 	private JFXButton addContactButton;
@@ -72,6 +64,8 @@ public class MainWindow
 	private Tab homeTab;
 	
 	public static Contact currentContact;
+	
+	public static ArrayList<Tab> openedTabs = new ArrayList<Tab>();
 	
 	@FXML // This method is called by the FXMLLoader when initialization is
 			// complete
@@ -138,6 +132,27 @@ public class MainWindow
 			public void handle(MouseEvent me) 
 			{
 				setCurrentContact(contactList.getSelectionModel().getSelectedItem());
+				
+				boolean tabAlreadyOpen = false;
+				
+				// If there is already a tab for this contact, switch to that tab
+				for(Tab tab: openedTabs)
+				{
+					// Look for a tab with the same name as the contact
+					if(tab.getText() == contactList.getSelectionModel().getSelectedItem().getDisplayName())
+					{
+						tabPane.getSelectionModel().select(tab);
+						tabAlreadyOpen = true;
+						break;
+					}
+				}
+				
+				// Otherwise create a new tab for the contact
+				if(!tabAlreadyOpen)
+				{
+					Tab tab = new Tab(currentContact.getDisplayName());
+					openTab(tab);
+				}
 			}
 		});
 
@@ -221,5 +236,18 @@ public class MainWindow
 
 		// Not really sure what this does, but I'm scared to delete it
 		contactList.getStyleClass().add("mylistview");
+	}
+	
+	public void openTab(Tab t)
+	{
+		tabPane.getTabs().add(t);
+		tabPane.getSelectionModel().select(t);
+		openedTabs.add(t);
+	}
+	
+	public void closeTab(Tab t)
+	{
+		openedTabs.remove(t);
+		tabPane.getTabs().remove(t);
 	}
 }
