@@ -1,10 +1,13 @@
 package me.murmurchat.client;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -13,7 +16,8 @@ import me.murmurchat.client.GUI.GUI;
 
 public class ServerHandler extends Thread
 {
-	public static final String IP = "0.0.0.0";
+	public static final String SERVER_LOC = "http://www.tommysource.com/murmur/ip";
+	public static final String DEFAULT_IP = "0.0.0.0";
 	public static final int PORT = 21212;
 
 	Socket socket;
@@ -26,7 +30,7 @@ public class ServerHandler extends Thread
 		try
 		{
 			socket = new Socket();
-			socket.connect(new InetSocketAddress(IP, PORT), 1000);
+			socket.connect(new InetSocketAddress(getIpFromServer(), PORT), 1000);
 
 			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
@@ -157,6 +161,24 @@ public class ServerHandler extends Thread
 		{
 			System.out.println("Error sending message.");
 		}
+	}
+	
+	String getIpFromServer()
+	{
+		try
+		{
+			BufferedReader r = new BufferedReader(new InputStreamReader(new URL(SERVER_LOC).openStream()));
+			String ip = r.readLine();
+			r.close();
+			
+			return ip;
+		}
+		catch (IOException e)
+		{
+			System.out.println("Error retrieving ip from server, defaulting to localhost.");
+		}
+		
+		return DEFAULT_IP;
 	}
 
 	public void updateServerProfile()

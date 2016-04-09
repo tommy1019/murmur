@@ -17,7 +17,7 @@ public class Murmur
 	{
 		serverHandler = new ServerHandler();
 
-		Application.launch(GUI.class, (java.lang.String[]) null);
+		Application.launch(GUI.class);
 
 		serverHandler.disconnect();
 	}
