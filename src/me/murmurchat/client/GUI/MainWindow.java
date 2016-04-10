@@ -25,7 +25,9 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import me.murmurchat.client.Contact;
+import me.murmurchat.client.Conversation;
 import me.murmurchat.client.Message;
 import me.murmurchat.client.Murmur;
 
@@ -61,11 +63,11 @@ public class MainWindow
 	private JFXTabPane tabPane;
 	
 	@FXML
-	private Tab homeTab;
+	private Pane bluePane;
 	
-	public static Contact currentContact;
+	public static Conversation currentConversation;
 	
-	public static ArrayList<Tab> openedTabs = new ArrayList<Tab>();
+	//public static ArrayList<ConversationTab> openedTabs = new ArrayList<ConversationTab>();
 	
 	@FXML // This method is called by the FXMLLoader when initialization is
 			// complete
@@ -131,15 +133,15 @@ public class MainWindow
 			@Override
 			public void handle(MouseEvent me) 
 			{
-				setCurrentContact(contactList.getSelectionModel().getSelectedItem());
-				
 				boolean tabAlreadyOpen = false;
 				
 				// If there is already a tab for this contact, switch to that tab
-				for(Tab tab: openedTabs)
+				for(Tab t: tabPane.getTabs())
 				{
+					ConversationTab tab = (ConversationTab)t;
+					
 					// Look for a tab with the same name as the contact
-					if(tab.getText() == contactList.getSelectionModel().getSelectedItem().getDisplayName())
+					if(tab.conversation.contacts.get(0) == contactList.getSelectionModel().getSelectedItem())
 					{
 						tabPane.getSelectionModel().select(tab);
 						tabAlreadyOpen = true;
@@ -147,11 +149,14 @@ public class MainWindow
 					}
 				}
 				
-				// Otherwise create a new tab for the contact
+				// Otherwise create a new conversation with the contact
 				if(!tabAlreadyOpen)
 				{
-					Tab tab = new Tab(currentContact.getDisplayName());
-					openTab(tab);
+					Conversation conversation = new Conversation();
+					conversation.generateNewConversation();
+					conversation.contacts.add(contactList.getSelectionModel().getSelectedItem());
+
+					createTab(conversation);
 				}
 			}
 		});
@@ -180,11 +185,6 @@ public class MainWindow
 		});
 	}
 
-	public static void setCurrentContact(Contact c)
-	{
-		currentContact = c;
-	}
-	
 	public void updateMessageLog()
 	{
 		clearMessageLog();
@@ -211,7 +211,7 @@ public class MainWindow
 		Message message = new Message(messageInput.getText());
 		clearMessageLog();
 		
-		Murmur.serverHandler.sendMessage(currentContact, message);
+		Murmur.serverHandler.sendMessage(currentConversation, message);
 
 		// Make sure there is a new line between every new entry
 		String newLine = System.getProperty("line.separator");
@@ -238,16 +238,27 @@ public class MainWindow
 		contactList.getStyleClass().add("mylistview");
 	}
 	
-	public void openTab(Tab t)
+	public void createTab(Conversation c)
 	{
-		tabPane.getTabs().add(t);
-		tabPane.getSelectionModel().select(t);
-		openedTabs.add(t);
+		ConversationTab tab = new ConversationTab(c);
+		
+		tab.setText(tab.conversation.contacts.get(0).getDisplayName());
+		
+		tabPane.getTabs().add(tab);
+		
+		bluePane.setOpacity(0);
+		
+		switchTab(tab);
 	}
 	
-	public void closeTab(Tab t)
+	public void switchTab(ConversationTab t)
 	{
-		openedTabs.remove(t);
+		tabPane.getSelectionModel().select(t);
+		currentConversation = t.conversation;
+	}
+	
+	public void closeTab(ConversationTab t)
+	{
 		tabPane.getTabs().remove(t);
 	}
 }

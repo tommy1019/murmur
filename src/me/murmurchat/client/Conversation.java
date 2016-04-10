@@ -9,8 +9,8 @@ public class Conversation
 	
 	long conversationId;
 	
-	ArrayList<Contact> contacts;
-	ArrayList<Message> messages;
+	public ArrayList<Contact> contacts;
+	public ArrayList<Message> messages;
 
 	public Conversation()
 	{
@@ -18,7 +18,7 @@ public class Conversation
 		messages = new ArrayList<Message>();
 	}
 	
-	void generateNewConversation()
+	public void generateNewConversation()
 	{
 		conversationId = random.nextLong();
 	}
