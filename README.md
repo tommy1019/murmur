@@ -10,3 +10,5 @@ The first time you use murmur, the program will generate a "key" file for you. T
 Murmur uses 2048 bit end-to-end encryption. All of your data on our server is encrypted using your personal key, which only you have access to. If somebody were to breach our server, the data would appear to be gibberish.
 
 This is the client implementation. See https://github.com/tommy1019/murmur-server for server implementation.
+
+![Screenshot](https://i.imgur.com/oQraL1U.jpg)
